@@ -1,0 +1,18 @@
+<svg width="8" height="13" viewBox="0 0 8 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>right_arrow</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-6555 2274)">
+<g id="right_arrow">
+<g id="Rectangle 39">
+<use xlink:href="#path0_fill" transform="matrix(-0.707107 0.707107 0.707107 0.707107 6561.5 -2274)" fill="#C7C7CC"/>
+</g>
+<g id="Rectangle 39">
+<use xlink:href="#path1_fill" transform="matrix(-0.707107 -0.707107 0.707107 -0.707107 6561.5 -2261)" fill="#C7C7CC"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" fill-rule="evenodd" d="M 0 0L 9.19239 0L 9.19239 2.12132L 4.54747e-13 2.12132L 0 0Z"/>
+<path id="path1_fill" fill-rule="evenodd" d="M 0 0L 9.19239 0L 9.19239 2.12132L 2.27374e-13 2.12132L 0 0Z"/>
+</defs>
+</svg>
