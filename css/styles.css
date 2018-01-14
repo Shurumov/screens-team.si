@@ -33,20 +33,31 @@ a{
 #list-terms a{
     display: block;
     text-decoration: none;
-    padding: 12px 0;
-    margin: 0 16px;
+    
+    
+}
+
+.list-terms_group-wrapper:last-of-type{
     border-bottom: 1px solid #C8C7CC;
 }
 
 
+.list-terms__item{
+    padding: 0.75em 0;
+    margin-left: 1em;
+    list-style: none;
+    border-bottom: 1px solid #C8C7CC;
+}
 
-#list-terms a:last-child{
+.list-terms__item:last-of-type{
+
     border-bottom: 0px;
 }
 
+
 #list-terms .list-terms__header-group{
     margin: 0;
-    padding: 12px 16px;
+    padding: 0.75em 1em;
     
 }
 
@@ -71,51 +82,8 @@ a{
     color: #8E8E93;
 }
 
-.list-terms__alphabet{
-    position: fixed;
-    right: 0;
-    top: 15%;
-    width: 15px;
-    background-color: rgba(255, 255, 255, 0.7);
-}
 
-.list-terms__alphabet ul{
-    width: 100%;
-}
 
-.list-terms__alphabet li{
-    list-style: none;
-    text-transform: uppercase;
-    font-size: 11px;
-    line-height: 13px;
-    text-align: center;
-    color: #E16262;
-}
-
-.list-terms__bottom-menu{
-    padding-top: 7px;
-    display: flex;
-    justify-content: center;
-    height: 65px;
-    box-shadow: 0px -1px rgba(0, 0, 0, 0.3);
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #fff;
-}
-
-.list-terms__bottom-element{
-    height: 50px;
-    color: #8E8E93;
-    font-size: 10px;
-    line-height: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    align-content: center;
-    min-width: 75px;
-}
 
 .list-terms__item-modal{
     position: fixed;

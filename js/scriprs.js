@@ -17,23 +17,34 @@ function searchTerm() {
     }
 };
 
+var list = document.getElementsByClassName("list-terms__elements")[0];
 var modal = document.getElementsByClassName("list-terms__item-modal");
 var item = document.getElementsByClassName("list-terms__item");
+var title = document.getElementsByClassName("list-terms__item-title");
+var subtitle = document.getElementsByClassName("list-terms__item-subtitle");
 var close = document.getElementsByClassName("modal-close");
 
-
-item[0].onclick = function() {  
-    modal[0].style.display="block";
+list.onclick = function(event){
+    for (var i = 0; i < item.length; i++){
+        if(event.target == item[i] || event.target == title[i] || event.target == subtitle[i] ){
+            modal[i].style.display="block";
+        }
+    }
 }
 
-close[0].onclick = function(event) {
-    modal[0].style.display="none";
-    
+
+function closeModals(){
+    for (var j = 0; j < close.length; j++){
+            modal[j].style.display="none";
+    }
 }
+
 
 
 window.onclick = function(event) {
-    if (event.target == modal[0] ){
-        modal[0].style.display="none";
+    for (var i = 0; i < item.length; i++){
+        if (event.target == modal[i] ){
+            modal[i].style.display="none";
+        }
     }
 }
