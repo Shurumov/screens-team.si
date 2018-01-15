@@ -37,16 +37,18 @@ a{
     
 }
 
-.list-terms_group-wrapper:last-of-type{
-    border-bottom: 1px solid #C8C7CC;
+.list-terms__item_wrapper{
+    margin-left: 1em;
+    list-style: none;
+    border-top: 1px solid #C8C7CC;
 }
 
 
 .list-terms__item{
     padding: 0.75em 0;
-    margin-left: 1em;
-    list-style: none;
-    border-bottom: 1px solid #C8C7CC;
+    
+    
+    
 }
 
 .list-terms__item:last-of-type{
@@ -54,15 +56,18 @@ a{
     border-bottom: 0px;
 }
 
-
-#list-terms .list-terms__header-group{
-    margin: 0;
-    padding: 0.75em 1em;
-    
+.list-terms__item_wrapper+.list-terms__header-group{
+    border-top: 1px solid #C8C7CC;
 }
 
+.list-terms__header-group+.list-terms__item_wrapper{
+    border-top: 0px ;
+}
+
+
 .list-terms__header-group{
-    padding: 5px 16px 3px;
+    margin: 0;
+    padding: 0.75em 1em;
     background-color: #F2F2F2;
     font-size: 16px;
     line-height: 19px;

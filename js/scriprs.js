@@ -4,7 +4,7 @@ function searchTerm() {
     input = document.getElementById('search');
     filter = input.value.toUpperCase();
     title = document.getElementsByClassName("list-terms__item-title");
-    item = document.getElementsByClassName("list-terms__item");
+    item = document.getElementsByClassName("list-terms__item_wrapper");
 
     for (var i = 0; i < title.length; i++) {
         a = title[i];
@@ -17,6 +17,8 @@ function searchTerm() {
     }
 };
 
+
+
 var list = document.getElementsByClassName("list-terms__elements")[0];
 var modal = document.getElementsByClassName("list-terms__item-modal");
 var item = document.getElementsByClassName("list-terms__item");
@@ -26,7 +28,7 @@ var close = document.getElementsByClassName("modal-close");
 
 list.onclick = function(event){
     for (var i = 0; i < item.length; i++){
-        if(event.target == item[i] || event.target == title[i] || event.target == subtitle[i] ){
+        if(event.target == item[i] ){
             modal[i].style.display="block";
         }
     }
