@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
@@ -16,14 +16,15 @@
             <input autocomplete="off" id="search" type="text" onkeyup="setInterval(searchTerm, 500)" placeholder="Поиск">
         </div>
         <div class="list-terms__elements" id="list-terms__elements">
-            <ul id="list-terms">
-                <li class="list-terms__header-group">
-                    <a href="" >A</a>
-                </li>
-                
-                    <li class="list-terms__item_wrapper">
+            <div id="list-terms">
+                <div class="list-terms__group">
+                    <div class="list-terms__header-group js-show-hide">
+                        <a class="js-search" href="">А</a>
+                    </div>
+
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item">
-                            <div class="list-terms__item-title">Адаптация перcонала</div>
+                            <div class="list-terms__item-title js-search">Адаптация перcонала</div>
                             <div class="list-terms__item-subtitle">Процесс включения новых сотрудников</div>
                         </a>
                         <div class="list-terms__item-modal">
@@ -49,11 +50,11 @@
                                 </div>
                             </div>
                         </div>
-                    </li>
+                    </div>
 
-                    <li class="list-terms__item_wrapper">
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item">
-                            <div class="list-terms__item-title">Аутсорсинг (Outsoursing)</div>
+                            <div class="list-terms__item-title js-search">Аутсорсинг (Outsoursing)</div>
                             <div class="list-terms__item-subtitle">Передача внешним экспертам функций работы</div>
                         </a>
                         <div class="list-terms__item-modal">
@@ -79,91 +80,92 @@
                                 </div>
                             </div>
                         </div>
-                    </li>
+                    </div>
 
-                    <li class="list-terms__item_wrapper">
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item">
-                            <div class="list-terms__item-title">Аутстаффинг</div>
+                            <div class="list-terms__item-title js-search">Аутстаффинг</div>
                             <div class="list-terms__item-subtitle">Вывод сотрудника за штат компании-заказчика</div>
                         </a>
                         <div class="list-terms__item-modal">
-                        <div class="list-terms__item-modal-content">
-                            <div class="list-terms__item-modal-top">
-                                <div class="list-terms__item-modal-title">Аутстаффинг
-                                    <div class="modal-close" onclick="closeModals()"><img src="img/close.svg" alt=""></div>
-                                </div>
+                            <div class="list-terms__item-modal-content">
+                                <div class="list-terms__item-modal-top">
+                                    <div class="list-terms__item-modal-title">Аутстаффинг
+                                        <div class="modal-close" onclick="closeModals()"><img src="img/close.svg" alt=""></div>
+                                    </div>
 
-                            </div>
-                            <div class="list-terms__item-modal-middle">
-                                <p><b>Обзор</b></p>
-                                <p>В мире работы и менеджмента «компетенция» составляет важнейший аспект работы человека в коллективе.</p>
-                                <p>По большей части, работа выполняется наиболее эффективно, если сотрудник обладает и проявляет совокупность навыков, умений и поведения (или отношений). Различные виды «компетенции» определяют каждую из этих составляющих эффективной работы.</p>
-                                <p><b>Техническая компетентность</b></p>
-                                <p>Навыки и знания в работе часто называют техническими, функциональными, «жесткими» или связанными с работой умениями. Цель таких определений – учесть все важные задачи, навыки и умения, необходимые для эффективного выполнения работы.</p>
-                            </div>
-                            <div class="list-terms__item-modal-bottom">
-                                <div class="list-terms__item-modal-bottom-text">
-                                    <div class="prev"><img class="arrow" src="img/arrow.svg" alt=""></div>В избранное
-                                    <div class="next"><img class="arrow" src="img/arrow.svg" alt=""></div>
+                                </div>
+                                <div class="list-terms__item-modal-middle">
+                                    <p><b>Обзор</b></p>
+                                    <p>В мире работы и менеджмента «компетенция» составляет важнейший аспект работы человека в коллективе.</p>
+                                    <p>По большей части, работа выполняется наиболее эффективно, если сотрудник обладает и проявляет совокупность навыков, умений и поведения (или отношений). Различные виды «компетенции» определяют каждую из этих составляющих эффективной работы.</p>
+                                    <p><b>Техническая компетентность</b></p>
+                                    <p>Навыки и знания в работе часто называют техническими, функциональными, «жесткими» или связанными с работой умениями. Цель таких определений – учесть все важные задачи, навыки и умения, необходимые для эффективного выполнения работы.</p>
+                                </div>
+                                <div class="list-terms__item-modal-bottom">
+                                    <div class="list-terms__item-modal-bottom-text">
+                                        <div class="prev"><img class="arrow" src="img/arrow.svg" alt=""></div>В избранное
+                                        <div class="next"><img class="arrow" src="img/arrow.svg" alt=""></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </li>
-                    
-                
-                <li class="list-terms__header-group">
-                    <a href="" >Б</a>
-                </li>
+                </div>
 
-                
-                    <li class="list-terms__item_wrapper">
+                <div class="list-terms__group">
+                    <div class="list-terms__header-group js-show-hide">
+                        <a class="js-search" href="">Б</a>
+                    </div>
+
+
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item" href="">
-                            <div class="list-terms__item-title">Бенчмаркинг (Benchmarking)</div>
+                            <div class="list-terms__item-title js-search">Бенчмаркинг (Benchmarking)</div>
                             <div class="list-terms__item-subtitle">Метод использования чужого опыта</div>
                         </a>
-                    </li>
-                    <li class="list-terms__item_wrapper">
+                    </div>
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item" href="">
-                            <div class="list-terms__item-title">Бизнес-процесс</div>
+                            <div class="list-terms__item-title js-search">Бизнес-процесс</div>
                             <div class="list-terms__item-subtitle">Взаимосвязь видов деятельности</div>
                         </a>
-                    </li>
-                
+                    </div>
+                </div>
+                <div class="list-terms__group">
+                    <div class="list-terms__header-group js-show-hide">
+                        <a class="js-search" href="">К</a>
+                    </div>
 
-                <li class="list-terms__header-group">
-                    <a href="" >К</a>
-                </li>
 
-                
-                    <li class="list-terms__item_wrapper">
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item" href="">
-                            <div class="list-terms__item-title">Квалификация</div>
+                            <div class="list-terms__item-title js-search">Квалификация</div>
                             <div class="list-terms__item-subtitle">Степень профессиональной подготовки</div>
                         </a>
-                    </li>
-                    <li class="list-terms__item_wrapper">
+                    </div>
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item" href="">
-                            <div class="list-terms__item-title">Коллективный договор</div>
+                            <div class="list-terms__item-title js-search">Коллективный договор</div>
                             <div class="list-terms__item-subtitle">Правовой акт</div>
                         </a>
-                    </li>
-                    <li class="list-terms__item_wrapper">
+                    </div>
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item" href="">
-                            <div class="list-terms__item-title">Компетенция</div>
+                            <div class="list-terms__item-title js-search">Компетенция</div>
                             <div class="list-terms__item-subtitle">Интегральное качество, сочетающее в себе знани...</div>
                         </a>
-                    </li>
-                    <li class="list-terms__item_wrapper">
+                    </div>
+                    <div class="list-terms__item_wrapper js-show-hide">
                         <a class="list-terms__item" href="">
-                            <div class="list-terms__item-title">Конфликт межличностный</div>
+                            <div class="list-terms__item-title js-search">Конфликт межличностный</div>
                             <div class="list-terms__item-subtitle">Столкновение противоположных целей, мотивов...</div>
                         </a>
-                    </li>
-                
+                    </div>
 
+                </div>
 
-            </ul>
+            </div>
         </div>
 
     </div>
