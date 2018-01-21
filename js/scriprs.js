@@ -1,4 +1,17 @@
-
+function debounce(f, ms) {
+    var timer = null;
+    return function (...args) {
+        var onComplete = function() {
+            f.apply(this, args);
+            timer = null;
+        }
+        
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(onComplete, ms);
+    };
+};
 
 function searchTerm() {
     var input, filter, search, item, a;
@@ -9,52 +22,31 @@ function searchTerm() {
 
     for (var i = 0; i < search.length; i++) {
         a = search[i];
-        
-        if(a.innerHTML.toUpperCase().indexOf(filter) == 0){
-            item[i].style.display="";
-            item[i].parentNode.childNodes[1].style.display="block";
-            
+
+        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            item[i].style.display = "block";
+            item[i].parentNode.childNodes[1].style.display = "block";
+
         } else {
-            item[i].style.display="none";
+            item[i].style.display = "none";
         };
     }
 };
 
-
+var search = debounce(searchTerm,500);
 
 var list = document.getElementsByClassName("list-terms__elements")[0];
-var modal = document.getElementsByClassName("list-terms__item-modal");
-var item = document.getElementsByClassName("list-terms__item");
-var title = document.getElementsByClassName("list-terms__item-title");
-var subtitle = document.getElementsByClassName("list-terms__item-subtitle");
-var close = document.getElementsByClassName("modal-close");
 
-list.onclick = function(event){
-    
-    for (var i = 0; i < item.length; i++){
-        if(event.target.parentNode == item[i] ){
-        modal[i].style.display="block";
-        }
+list.onclick = function (event) {
+    if (event.target.parentNode.classList.contains("list-terms__item")) {
+        event.target.parentNode.parentNode.childNodes[3].style.display = "block";
     }
-    
-    
-}
 
-
-function closeModals(){
-    for (var j = 0; j < close.length; j++){
-        modal[j].style.display="none";
-        
+    if (event.target.parentNode.classList.contains("modal-close") || event.target.classList.contains("modal-close")) {
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
     }
-}
 
-
-
-window.onclick = function(event) {
-    for (var i = 0; i < item.length; i++){
-        if (event.target == modal[i] ){
-            modal[i].style.display="none";
-            break
-        }
+    if (event.target.classList.contains("modal-close")) {
+        event.target.style.display = "none";
     }
 }

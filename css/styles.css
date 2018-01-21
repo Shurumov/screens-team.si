@@ -33,8 +33,6 @@ a{
 .list-terms__item{
     display: block;
     text-decoration: none;
-    
-    
 }
 
 .list-terms__item_wrapper{
@@ -42,8 +40,6 @@ a{
     list-style: none;
     border-top: 1px solid #C8C7CC;
 }
-
-
 
 
 
