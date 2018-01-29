@@ -8,7 +8,9 @@ a{
     cursor: pointer;
 }
 
-
+.disable {
+    display: none !important;
+}
 
 .list-terms__search{
     background-color: #EBEEF2;
@@ -35,7 +37,9 @@ a{
     text-decoration: none;
 }
 
+
 .list-terms__item_wrapper{
+    display: block;
     margin-left: 1em;
     list-style: none;
     border-top: 1px solid #C8C7CC;
@@ -49,6 +53,7 @@ a{
 }
 
 .list-terms__header-group{
+    display: block;
     margin: 0;
     padding: 0.75em 1em;
     background-color: #F2F2F2;
@@ -68,10 +73,12 @@ a{
 }
 
 .list-terms__header-group+.list-terms__item_wrapper{
-    border-top: 0px ;
+    border-top: 0px;
 }
 
-
+.disable+.list-terms__item_wrapper{
+    border-top: 0px ;
+}
 
 
 .list-terms__item-title{
@@ -103,6 +110,8 @@ a{
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.3);
 }
+
+
 
 .list-terms__item-modal-content{
     background-color: #fff;

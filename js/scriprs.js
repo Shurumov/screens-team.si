@@ -24,11 +24,11 @@ function searchTerm() {
         a = search[i];
 
         if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            item[i].style.display = "block";
-            item[i].parentNode.childNodes[1].style.display = "block";
+            item[i].classList.remove('disable');
+            item[i].parentNode.childNodes[1].classList.remove('disable');
 
         } else {
-            item[i].style.display = "none";
+            item[i].classList.add('disable');
         };
     }
 };
