@@ -1,11 +1,11 @@
 function debounce(f, ms) {
     var timer = null;
     return function (...args) {
-        var onComplete = function() {
+        var onComplete = function () {
             f.apply(this, args);
             timer = null;
         }
-        
+
         if (timer) {
             clearTimeout(timer);
         }
@@ -33,7 +33,7 @@ function searchTerm() {
     }
 };
 
-var search = debounce(searchTerm,500);
+var search = debounce(searchTerm, 500);
 
 var list = document.getElementsByClassName("list-terms__elements")[0];
 
@@ -49,4 +49,30 @@ list.onclick = function (event) {
     if (event.target.classList.contains("modal-close")) {
         event.target.style.display = "none";
     }
+};
+
+//Получаем json, сортируем массив
+
+var termsListOriginal, termsList;
+
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'terms-list.json');
+xhr.onreadystatechange = function (e) {
+    if (this.readyState == 4) {
+        if (this.status == 200) {
+            termsListOriginal = JSON.parse(this.responseText);
+            termsList = termsListOriginal.slice().sort(function (one, two) {
+                if (one.title < two.title) return -1;
+                if (one.title > two.title) return 1;
+                return 0;
+            });
+            
+             termsListOriginal = eval("(" + xhr.responseText + ")") 
+        } else {
+            alert('Что-то пошло не так')
+        }
+    }
 }
+xhr.send();
+
+console.log(termsList);
