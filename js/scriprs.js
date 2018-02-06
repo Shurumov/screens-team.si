@@ -51,28 +51,82 @@ list.onclick = function (event) {
     }
 };
 
-//Получаем json, сортируем массив
+//Получаем json
 
-var termsListOriginal, termsList;
+var termsListOriginal, termsListArray;
 
 var xhr = new XMLHttpRequest();
-xhr.open('GET', 'terms-list.json');
+xhr.open('GET', 'terms-list.json', false);
 xhr.onreadystatechange = function (e) {
     if (this.readyState == 4) {
         if (this.status == 200) {
             termsListOriginal = JSON.parse(this.responseText);
-            termsList = termsListOriginal.slice().sort(function (one, two) {
-                if (one.title < two.title) return -1;
-                if (one.title > two.title) return 1;
-                return 0;
-            });
-            
-             termsListOriginal = eval("(" + xhr.responseText + ")") 
         } else {
-            alert('Что-то пошло не так')
+            alert('Что-то пошло не так');
         }
     }
 }
 xhr.send();
 
-console.log(termsList);
+//сортируем массив
+
+termsListArray = termsListOriginal.slice().sort(function (one, two) {
+    if (one.title < two.title) return -1;
+    if (one.title > two.title) return 1;
+    return 0;
+});
+
+var listTerms = document.getElementsByClassName('list-terms__elements')[0];
+var groups = document.getElementsByClassName('list-terms__group');
+var groupTitle;
+termsListArray.forEach(function (itam, i, termsListArray) {
+
+    if (termsListArray[i].title.charAt(0) != groupTitle) {
+        groupTitle = termsListArray[i].title.charAt(0);
+
+        var group = document.createElement('div');
+        group.className = "list-terms__group";
+        listTerms.appendChild(group);
+
+        var header = document.createElement('div');
+        header.className = "list-terms__header-group js-show-hide";
+        group.appendChild(header)
+
+        var text = document.createElement('a');
+        text.className = "js-search";
+        text.innerHTML = termsListArray[i].title.charAt(0);
+        header.appendChild(text);
+    }
+
+    var itemWrapper = document.createElement('div');
+    itemWrapper.className = "list-terms__item_wrapper js-show-hide";
+    groups[groups.length - 1].appendChild(itemWrapper);
+
+    var item = document.createElement('a');
+    item.className = "list-terms__item";
+    itemWrapper.appendChild(item);
+
+    var itemTitle = document.createElement('div');
+    itemTitle.className = "list-terms__item-title js-search";
+    itemTitle.innerHTML = termsListArray[i].title;
+    item.appendChild(itemTitle);
+
+    var itemSubtitle = document.createElement('div');
+    itemSubtitle.className = "list-terms__item-subtitle";
+    itemSubtitle.innerHTML = stringTruncation(termsListArray[i].html);
+    item.appendChild(itemSubtitle);
+
+});
+
+function stringTruncation(str) {
+    if (str.length > 30) {
+        return str.slice(0, 27) + '...';
+    }
+    return str;
+}
+
+
+//var listTermsGroup = document.createElement('div');
+//listTermsGroup.className = "list-terms__group";
+//listTermsGroup.innerHTML = termsListArray[0].title;
+//listTerms.appendChild(listTermsGroup);
