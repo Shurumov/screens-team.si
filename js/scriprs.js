@@ -151,7 +151,7 @@ function searchTerm() {
 
         if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
             item[i].classList.remove('disable');
-            item[i].parentNode.childNodes[1].classList.remove('disable');
+            item[i].parentNode.childNodes[0].classList.remove('disable');
 
         } else {
             item[i].classList.add('disable');
@@ -162,8 +162,6 @@ function searchTerm() {
 var search = debounce(searchTerm, 500);
 
 var list = document.getElementsByClassName("list-terms__elements")[0];
-
-
 
 function OpenModal(event) {
     var target = event.target;
@@ -180,7 +178,7 @@ function OpenModal(event) {
     };
 
     if (target.classList.contains("list-terms__item")) {
-        target.parentNode.childNodes[3].style.display = "block";
+        target.parentNode.childNodes[1].style.display = "block";
     }
 }
 
