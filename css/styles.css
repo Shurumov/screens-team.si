@@ -1,25 +1,45 @@
-*{
+* {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    
 }
-a{
+a {
     cursor: pointer;
 }
-
 .disable {
     display: none !important;
 }
+.list-terms__letter-list_wrapper {
+    height: 100%;
+    position: fixed;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
 
-.list-terms__search{
+.list-terms__letter-list {
+    width: 15px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.list-terms__letter-list-item {
+    height: 13px;
+    font-size: 11px;
+    line-height: 13px;
+    text-align: center;
+    color: #E16262;
+    cursor: pointer;
+}
+.list-terms__search {
     background-color: #EBEEF2;
     padding: 8px;
     border-bottom: 1px solid #C8C7CC;
     font-size: 16px;
 }
-
-.list-terms__search input{
+.list-terms__search input {
     width: 100%;
     text-align: center;
     padding: 6px 0;
@@ -27,32 +47,29 @@ a{
     border-radius: 5px;
     font-size: 16px;
 }
-
-.list-terms__elements{
+.list-terms__elements {
     margin-bottom: 73px;
 }
-
-.list-terms__item{
+.list-terms__item {
     display: block;
     text-decoration: none;
 }
 
-
-.list-terms__item_wrapper{
+.list-terms__item_wrapper {
     display: block;
     margin-left: 1em;
     list-style: none;
     border-top: 1px solid #C8C7CC;
 }
-
-
-
-.list-terms__item:last-of-type{
-
-    border-bottom: 0px;
+.list-terms__item_wrapper_disable{
+    display: none;
 }
 
-.list-terms__header-group{
+
+.list-terms__item:last-of-type {
+    border-bottom: 0px;
+}
+.list-terms__header-group {
     display: block;
     margin: 0;
     padding: 0.75em 1em;
@@ -61,45 +78,39 @@ a{
     border-bottom: 1px solid #C8C7CC;
     list-style: none;
 }
-.list-terms__header-group a{
+
+.list-terms__header-group_disable {
+    display: none;
+}
+
+.list-terms__header-group a {
     font-size: 16px;
     line-height: 19px;
     text-decoration: none;
     color: #8E8E93;
 }
-
-.list-terms__item_wrapper+.list-terms__header-group{
+.list-terms__item_wrapper+.list-terms__header-group {
     border-top: 1px solid #C8C7CC;
 }
-
-.list-terms__header-group+.list-terms__item_wrapper{
+.list-terms__header-group+.list-terms__item_wrapper, .list-terms__header-group_disable+.list-terms__item_wrapper {
     border-top: 0px;
 }
-
-.disable+.list-terms__item_wrapper{
-    border-top: 0px ;
+.list-terms__item_wrapper_disable+.list-terms__item_wrapper {
+    border-top: 0px;
 }
-
-
-.list-terms__item-title{
+.list-terms__item-title {
     margin-top: 0.75em;
     font-size: 15px;
     line-height: 18px;
     color: #373737;
-    
 }
-.list-terms__item-subtitle{
+.list-terms__item-subtitle {
     margin-bottom: 0.75em;
     font-size: 13px;
     line-height: 15px;
     color: #8E8E93;
-    
 }
-
-
-
-
-.list-terms__item-modal{
+.list-terms__item-modal {
     position: fixed;
     display: none;
     z-index: 1;
@@ -110,34 +121,25 @@ a{
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.3);
 }
-
-
-
-.list-terms__item-modal-content{
+.list-terms__item-modal-content {
     background-color: #fff;
     margin: 5% 16px;
     border-radius: 4px;
-    
 }
-
-.list-terms__item-modal-top{
+.list-terms__item-modal-top {
     padding: 18px 17px 12px;
     border-bottom: 1px solid #D8D8D8;
-    
 }
-
-.list-terms__item-modal-title{
+.list-terms__item-modal-title {
     display: block;
     width: 100%;
     text-align: center;
     font-size: 17px;
     line-height: 20px;
     color: #000000;
-    
     position: relative;
 }
-
-.modal-close{
+.modal-close {
     position: absolute;
     right: 0;
     top: 0;
@@ -146,27 +148,23 @@ a{
     z-index: 10;
     cursor: pointer;
 }
-
-.list-terms__item-modal-middle{
+.list-terms__item-modal-middle {
     padding: 17px 15px;
 }
-
 .list-terms__item-modal-middle p {
     margin-bottom: 5px;
 }
-
-.list-terms__item-modal-bottom{
+.list-terms__item-modal-bottom {
     border-top: 1px solid #C7C7C7;
     padding: 15px 20px;
 }
-
-.list-terms__item-modal-bottom-text{
+.list-terms__item-modal-bottom-text {
     display: block;
     width: 100%;
     text-align: center;
     font-size: 13px;
     line-height: 15px;
-    color: #E16262; 
+    color: #E16262;
     position: relative;
     font-weight: bold;
 }
@@ -178,7 +176,6 @@ a{
     color: #C7C7CC;
     cursor: pointer;
 }
-
 .next {
     position: absolute;
     right: 0;
@@ -187,12 +184,10 @@ a{
     color: #C7C7CC;
     cursor: pointer;
 }
-
-.next img{
+.next img {
     transform: rotate(180deg);
 }
-
-.arrow{
+.arrow {
     height: 16px;
     vertical-align: middle;
 }

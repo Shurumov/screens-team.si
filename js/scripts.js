@@ -21,11 +21,11 @@ function getList() {
                 'X-Appercode-Session-Token': session
             }
         })
-
         .then(function (response) {
 
             termsListOriginal = response.data;
-            createList()
+            createList();
+            createLettersList()
         })
         .catch(function (error) {
 
@@ -34,6 +34,8 @@ function getList() {
 }
 
 // Создание списка
+
+var listTermsElements = document.getElementsByClassName('list-terms__elements')[0];
 
 function createList() {
     //сортируем массив
@@ -44,10 +46,10 @@ function createList() {
         return 0;
     });
 
-    var listTerms = document.getElementsByClassName('list-terms__elements')[0];
+
     var groups = document.getElementsByClassName('list-terms__group');
     var groupTitle;
-    termsListArray.forEach(function (itam, i, termsListArray) {
+    termsListArray.forEach(function (item, i, termsListArray) {
 
         //создание группы и хедера 
 
@@ -56,14 +58,14 @@ function createList() {
 
             var group = document.createElement('div');
             group.className = "list-terms__group";
-            listTerms.appendChild(group);
+            listTermsElements.appendChild(group);
 
             var header = document.createElement('div');
-            header.className = "list-terms__header-group js-show-hide";
+            header.className = "list-terms__header-group";
             group.appendChild(header)
 
             var text = document.createElement('a');
-            text.className = "js-search js-group-header";
+            text.className = "js-group-header";
             text.innerHTML = termsListArray[i].title.charAt(0);
             header.appendChild(text);
         }
@@ -138,6 +140,56 @@ function createList() {
     });
 }
 
+//Создание алфавита справа 
+
+var listTerms = document.getElementsByClassName('list-terms')[0];
+
+function createLettersList() {
+    var Headers = document.getElementsByClassName("js-group-header");
+    var groupHeaders = [];
+    for (var i = 0; i < Headers.length; i++) {
+        groupHeaders[i] = Headers[i].innerHTML;
+    }
+
+    var letterListWrapper = document.createElement('div');
+    letterListWrapper.className = "list-terms__letter-list_wrapper";
+    listTerms.appendChild(letterListWrapper);
+    listTerms.insertBefore(letterListWrapper, listTerms.firstChild);
+
+    var letterList = document.createElement('div');
+    letterList.className = "list-terms__letter-list";
+    letterListWrapper.appendChild(letterList);
+
+    groupHeaders.forEach(function (item, i, groupHeaders) {
+        var itemLettersList = document.createElement('div');
+        itemLettersList.className = "list-terms__letter-list-item";
+        itemLettersList.innerHTML = groupHeaders[i];
+        letterList.appendChild(itemLettersList);
+    });
+}
+
+//пролистывание списка при наведении на буквы
+
+function goToHeader(event) {
+    var target = event.target;
+    var targetIndex;
+    
+    var Headers = document.getElementsByClassName("js-group-header");
+    var groupHeaders = [];
+    for (var i = 0; i < Headers.length; i++) {
+        groupHeaders[i] = Headers[i].innerHTML;
+    }
+
+    if (target.classList.contains("list-terms__letter-list-item")) {
+        targetIndex = groupHeaders.indexOf(target.innerHTML);
+    }
+    
+    
+}
+
+listTerms.addEventListener("mouseover", goToHeader);
+
+// Вспомогательные функции
 
 function debounce(f, ms) {
     var timer = null;
@@ -161,6 +213,8 @@ function stringTruncation(str, maxLength) {
     return str;
 }
 
+//Поиск и вильтрация из input
+
 function searchTerm() {
     var input, filter, search, item, a;
     input = document.getElementById('search');
@@ -172,13 +226,30 @@ function searchTerm() {
         a = search[i];
 
         if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            item[i].classList.remove('disable');
-            item[i].parentNode.childNodes[0].classList.remove('disable');
+            item[i].classList.remove('list-terms__item_wrapper_disable');
+            item[i].classList.add('list-terms__item_wrapper');
+
 
         } else {
-            item[i].classList.add('disable');
+            item[i].classList.add('list-terms__item_wrapper_disable');
+            item[i].classList.remove('list-terms__item_wrapper');
+            
         };
+        
+        item[i].parentNode.childNodes[0].classList.add('list-terms__header-group_disable');
+        item[i].parentNode.childNodes[0].classList.remove('list-terms__header-group');
     }
+
+    var activeTerms = document.getElementsByClassName("list-terms__item_wrapper");
+
+    for (var j = 0; j < activeTerms.length; j++) {
+         
+        activeTerms[j].parentNode.childNodes[0].classList.remove('list-terms__header-group_disable');
+        activeTerms[j].parentNode.childNodes[0].classList.add('list-terms__header-group');
+    }
+    
+    
+
 };
 
 var search = debounce(searchTerm, 500);
