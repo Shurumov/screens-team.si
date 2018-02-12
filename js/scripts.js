@@ -173,7 +173,7 @@ function createLettersList() {
 function goToHeader(event) {
     var target = event.target;
     var targetIndex;
-    
+
     var Headers = document.getElementsByClassName("js-group-header");
     var groupHeaders = [];
     for (var i = 0; i < Headers.length; i++) {
@@ -183,8 +183,14 @@ function goToHeader(event) {
     if (target.classList.contains("list-terms__letter-list-item")) {
         targetIndex = groupHeaders.indexOf(target.innerHTML);
     }
-    
-    
+
+    var scroll_el = $('.list-terms__header-group')[targetIndex];
+    if ($(scroll_el).length != 0) {
+        $('html, body').animate({
+            scrollTop: $(scroll_el).offset().top
+        }, 500);
+    }
+    return false;
 }
 
 listTerms.addEventListener("mouseover", goToHeader);
@@ -233,9 +239,9 @@ function searchTerm() {
         } else {
             item[i].classList.add('list-terms__item_wrapper_disable');
             item[i].classList.remove('list-terms__item_wrapper');
-            
+
         };
-        
+
         item[i].parentNode.childNodes[0].classList.add('list-terms__header-group_disable');
         item[i].parentNode.childNodes[0].classList.remove('list-terms__header-group');
     }
@@ -243,12 +249,12 @@ function searchTerm() {
     var activeTerms = document.getElementsByClassName("list-terms__item_wrapper");
 
     for (var j = 0; j < activeTerms.length; j++) {
-         
+
         activeTerms[j].parentNode.childNodes[0].classList.remove('list-terms__header-group_disable');
         activeTerms[j].parentNode.childNodes[0].classList.add('list-terms__header-group');
     }
-    
-    
+
+
 
 };
 
