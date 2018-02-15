@@ -16,7 +16,7 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
 function getList() {
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations',
+            url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=200',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -145,10 +145,16 @@ function createList() {
 var listTerms = document.getElementsByClassName('list-terms')[0];
 
 function createLettersList() {
-    var Headers = document.getElementsByClassName("js-group-header");
+    var Headers = document.getElementsByClassName("list-terms__header-group");
     var groupHeaders = [];
     for (var i = 0; i < Headers.length; i++) {
-        groupHeaders[i] = Headers[i].innerHTML;
+        groupHeaders[i] = Headers[i].firstChild.innerHTML;
+    }
+    
+    var rightList = document.getElementsByClassName("list-terms__letter-list_wrapper")[0];
+    
+    if (rightList){
+        listTerms.removeChild(rightList);
     }
 
     var letterListWrapper = document.createElement('div');
@@ -170,30 +176,33 @@ function createLettersList() {
 
 //пролистывание списка при наведении на буквы
 
+var toHeader = debounce(goToHeader, 100);
+
 function goToHeader(event) {
     var target = event.target;
     var targetIndex;
 
-    var Headers = document.getElementsByClassName("js-group-header");
+    var Headers = document.getElementsByClassName("list-terms__header-group");
     var groupHeaders = [];
     for (var i = 0; i < Headers.length; i++) {
-        groupHeaders[i] = Headers[i].innerHTML;
+        groupHeaders[i] = Headers[i].firstChild.innerHTML;
     }
 
     if (target.classList.contains("list-terms__letter-list-item")) {
         targetIndex = groupHeaders.indexOf(target.innerHTML);
+        
     }
 
     var scroll_el = $('.list-terms__header-group')[targetIndex];
     if ($(scroll_el).length != 0) {
         $('html, body').animate({
             scrollTop: $(scroll_el).offset().top
-        }, 500);
+        }, 100);
     }
     return false;
 }
 
-listTerms.addEventListener("mouseover", goToHeader);
+listTerms.addEventListener("mouseover", toHeader);
 
 // Вспомогательные функции
 
@@ -219,7 +228,7 @@ function stringTruncation(str, maxLength) {
     return str;
 }
 
-//Поиск и вильтрация из input
+//Поиск и фильтрация из input
 
 function searchTerm() {
     var input, filter, search, item, a;
@@ -254,6 +263,7 @@ function searchTerm() {
         activeTerms[j].parentNode.childNodes[0].classList.add('list-terms__header-group');
     }
 
+    createLettersList();
 
 
 };
@@ -278,6 +288,7 @@ function OpenModal(event) {
 
     if (target.classList.contains("list-terms__item")) {
         target.parentNode.childNodes[1].style.display = "block";
+        console.log(target.parentNode)
     }
 }
 
@@ -293,5 +304,41 @@ function CloseModal(event) {
     }
 };
 
+function PrevModal(event) {
+    var target = event.target;
+     
+    
+    while (!target.classList.contains("list-terms__item_wrapper")) {
+        if (target.classList.contains("list-terms__item_wrapper")) {
+            break;
+        }
+        target = target.parentNode;
+    };
+    
+    var activeItems = document.getElementsByClassName("list-terms__item_wrapper");
+    var activeModals = [];
+    for (var i = 0; i < activeItems.length; i++) {
+        activeModals[i] = activeItems[i].lastChild;
+    }
+    console.log(activeModals);
+    console.log(target);
+    console.log(activeModals.indexOf(target));
+    console.log(activeModals.indexOf(1));
+    
+    if (target.parentNode.classList.contains("prev")) {
+        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none"; target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.previousSibling.childNodes[1].style.display = "block";
+    }
+}
+
+function NextModal(event) {
+    var target = event.target;
+    
+    if (target.parentNode.classList.contains("next")) {
+        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none"; target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.nextSibling.childNodes[1].style.display = "block";
+    }
+}
+
 list.addEventListener("click", CloseModal);
 list.addEventListener("click", OpenModal);
+list.addEventListener("click", NextModal);
+list.addEventListener("click", PrevModal);
