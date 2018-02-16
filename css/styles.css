@@ -61,6 +61,11 @@ a {
     list-style: none;
     border-top: 1px solid #C8C7CC;
 }
+
+.list-terms__item_wrapper:first-of-type {
+    border-top: 0px solid #C8C7CC;
+}
+
 .list-terms__item_wrapper_disable{
     display: none;
 }
@@ -89,15 +94,9 @@ a {
     text-decoration: none;
     color: #8E8E93;
 }
-.list-terms__item_wrapper+.list-terms__header-group {
-    border-top: 1px solid #C8C7CC;
-}
-.list-terms__header-group+.list-terms__item_wrapper, .list-terms__header-group_disable+.list-terms__item_wrapper {
-    border-top: 0px;
-}
-.list-terms__item_wrapper_disable+.list-terms__item_wrapper {
-    border-top: 0px;
-}
+
+
+
 .list-terms__item-title {
     margin-top: 0.75em;
     font-size: 15px;

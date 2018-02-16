@@ -2,8 +2,8 @@ var termsListOriginal, termsListArray, session;
 
 //Получаем json
 axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
-        "username": "admin",
-        "password": "pa3m8ix5ew"
+        "username": "abbreviations",
+        "password": "gth7596"
     })
     .then(function (response) {
         session = response.data.sessionId;
@@ -16,7 +16,7 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
 function getList() {
     axios({
             method: 'get',
-            url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=200',
+            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=400',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -150,10 +150,10 @@ function createLettersList() {
     for (var i = 0; i < Headers.length; i++) {
         groupHeaders[i] = Headers[i].firstChild.innerHTML;
     }
-    
+
     var rightList = document.getElementsByClassName("list-terms__letter-list_wrapper")[0];
-    
-    if (rightList){
+
+    if (rightList) {
         listTerms.removeChild(rightList);
     }
 
@@ -190,7 +190,7 @@ function goToHeader(event) {
 
     if (target.classList.contains("list-terms__letter-list-item")) {
         targetIndex = groupHeaders.indexOf(target.innerHTML);
-        
+
     }
 
     var scroll_el = $('.list-terms__header-group')[targetIndex];
@@ -275,12 +275,8 @@ var list = document.getElementsByClassName("list-terms__elements")[0];
 function OpenModal(event) {
     var target = event.target;
 
-    if (target.parentNode.classList.contains("modal-close") || target.classList.contains("modal-close")) {
-        return
-    }
-
     while (!target.classList.contains("list-terms__item")) {
-        if (target.classList.contains("list-terms__item") || target.tagName == "p") {
+        if (target.classList.contains("list-terms__item")) {
             break;
         }
         target = target.parentNode;
@@ -288,7 +284,6 @@ function OpenModal(event) {
 
     if (target.classList.contains("list-terms__item")) {
         target.parentNode.childNodes[1].style.display = "block";
-        console.log(target.parentNode)
     }
 }
 
@@ -304,37 +299,77 @@ function CloseModal(event) {
     }
 };
 
-function PrevModal(event) {
-    var target = event.target;
-     
-    
-    while (!target.classList.contains("list-terms__item_wrapper")) {
-        if (target.classList.contains("list-terms__item_wrapper")) {
-            break;
-        }
-        target = target.parentNode;
-    };
-    
-    var activeItems = document.getElementsByClassName("list-terms__item_wrapper");
-    var activeModals = [];
-    for (var i = 0; i < activeItems.length; i++) {
-        activeModals[i] = activeItems[i].lastChild;
-    }
-    console.log(activeModals);
-    console.log(target);
-    console.log(activeModals.indexOf(target));
-    console.log(activeModals.indexOf(1));
-    
+function PrevModal(eventPrev) {
+    var target = eventPrev.target;
+
     if (target.parentNode.classList.contains("prev")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none"; target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.previousSibling.childNodes[1].style.display = "block";
+        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
+
+
+        while (!target.classList.contains("list-terms__item_wrapper")) {
+            if (target.classList.contains("list-terms__item_wrapper")) {
+                break;
+            }
+            target = target.parentNode;
+        };
+
+        target = target.previousSibling;
+
+        while (!target.classList.contains("list-terms__item_wrapper")) {
+            if (target.classList.contains("list-terms__item_wrapper")) {
+                break;
+            }
+
+            if (target.classList.contains("list-terms__header-group") || target.classList.contains("list-terms__header-group_disable")) {
+                target = target.parentNode.previousSibling.lastChild;
+                continue
+            }
+
+            target = target.previousSibling;
+        };
+
+        target.lastChild.style.display = "block";
     }
 }
 
-function NextModal(event) {
-    var target = event.target;
-    
+function NextModal(eventNext) {
+    var target = eventNext.target;
+
     if (target.parentNode.classList.contains("next")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none"; target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.nextSibling.childNodes[1].style.display = "block";
+        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
+
+
+        while (!target.classList.contains("list-terms__item_wrapper")) {
+            if (target.classList.contains("list-terms__item_wrapper")) {
+                break;
+            }
+            target = target.parentNode;
+        };
+
+        if (target == target.parentNode.lastChild) {
+
+            target = target.parentNode.nextSibling.firstChild;
+        } else {
+            target = target.nextSibling;
+        }
+
+        while (!target.classList.contains("list-terms__item_wrapper")) {
+
+            if (target.classList.contains("list-terms__item_wrapper")) {
+                break;
+            }
+
+            if (target == target.parentNode.lastChild) {
+
+                target = target.parentNode.nextSibling.firstChild;
+                continue
+            }
+
+            target = target.nextSibling;
+
+        };
+
+        target.lastChild.style.display = "block";
     }
 }
 
