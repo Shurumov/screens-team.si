@@ -16,7 +16,7 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
 function getList() {
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=400',
+            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=600',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -25,7 +25,8 @@ function getList() {
 
             termsListOriginal = response.data;
             createList();
-            createLettersList()
+            createLettersList();
+            hideArrow()
         })
         .catch(function (error) {
 
@@ -174,6 +175,35 @@ function createLettersList() {
     });
 }
 
+// Удаление и добавленеи стрелок в первом и последнем модальном окне
+
+function hideArrow() {
+    var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].lastChild.lastChild.lastChild.lastChild.firstChild;
+
+    firstArrow.style.display = "none";
+
+    var lastArrowArray = document.getElementsByClassName("list-terms__item_wrapper");
+    var lastArrow = lastArrowArray[lastArrowArray.length - 1].lastChild.lastChild.lastChild.lastChild.lastChild;
+    lastArrow.style.display = "none"
+
+}
+
+function showArrow() {
+    var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].lastChild.lastChild.lastChild.lastChild.firstChild;
+
+    firstArrow.style.display = "block";
+
+    var lastArrowArray = document.getElementsByClassName("list-terms__item_wrapper");
+    var lastArrow = lastArrowArray[lastArrowArray.length - 1].lastChild.lastChild.lastChild.lastChild.lastChild;
+    lastArrow.style.display = "block"
+
+}
+
+// Удаление бордера у первого элемента группы 
+
+
+
+
 //пролистывание списка при наведении на буквы
 
 var toHeader = debounce(goToHeader, 100);
@@ -231,6 +261,8 @@ function stringTruncation(str, maxLength) {
 //Поиск и фильтрация из input
 
 function searchTerm() {
+    showArrow();
+
     var input, filter, search, item, a;
     input = document.getElementById('search');
     filter = input.value.toUpperCase();
@@ -264,6 +296,7 @@ function searchTerm() {
     }
 
     createLettersList();
+    hideArrow();
 
 
 };
@@ -275,12 +308,12 @@ var list = document.getElementsByClassName("list-terms__elements")[0];
 function OpenModal(event) {
     var target = event.target;
 
-    while (!target.classList.contains("list-terms__item")) {
-        if (target.classList.contains("list-terms__item")) {
-            break;
-        }
-        target = target.parentNode;
-    };
+
+    if (target.parentNode.classList.contains("list-terms__item")) {
+        target = target.parentNode;;
+    }
+
+
 
     if (target.classList.contains("list-terms__item")) {
         target.parentNode.childNodes[1].style.display = "block";
