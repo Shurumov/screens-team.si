@@ -3,12 +3,15 @@
     padding: 0;
     font-family: sans-serif;
 }
+
 a {
     cursor: pointer;
 }
+
 .disable {
     display: none !important;
 }
+
 .list-terms__letter-list_wrapper {
     height: 100%;
     position: fixed;
@@ -33,12 +36,14 @@ a {
     color: #E16262;
     cursor: pointer;
 }
+
 .list-terms__search {
     background-color: #EBEEF2;
     padding: 8px;
     border-bottom: 1px solid #C8C7CC;
     font-size: 16px;
 }
+
 .list-terms__search input {
     width: 100%;
     text-align: center;
@@ -47,9 +52,11 @@ a {
     border-radius: 5px;
     font-size: 16px;
 }
+
 .list-terms__elements {
     margin-bottom: 73px;
 }
+
 .list-terms__item {
     display: block;
     text-decoration: none;
@@ -59,14 +66,14 @@ a {
     display: block;
     margin-left: 1em;
     list-style: none;
-    
+
 }
 
 .list-terms__item_wrapper ~ .list-terms__item_wrapper {
     border-top: 1px solid #C8C7CC;
 }
 
-.list-terms__item_wrapper_disable{
+.list-terms__item_wrapper_disable {
     display: none;
 }
 
@@ -74,6 +81,7 @@ a {
 .list-terms__group:last-of-type {
     border-bottom: 1px solid #C8C7CC;
 }
+
 .list-terms__header-group {
     display: block;
     margin: 0;
@@ -103,12 +111,14 @@ a {
     line-height: 18px;
     color: #373737;
 }
+
 .list-terms__item-subtitle {
     margin-bottom: 0.75em;
     font-size: 13px;
     line-height: 15px;
     color: #8E8E93;
 }
+
 .list-terms__item-modal {
     position: fixed;
     display: none;
@@ -120,15 +130,18 @@ a {
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.3);
 }
+
 .list-terms__item-modal-content {
     background-color: #fff;
     margin: 5% 16px;
     border-radius: 4px;
 }
+
 .list-terms__item-modal-top {
     padding: 18px 17px 12px;
     border-bottom: 1px solid #D8D8D8;
 }
+
 .list-terms__item-modal-title {
     display: block;
     width: 100%;
@@ -138,6 +151,7 @@ a {
     color: #000000;
     position: relative;
 }
+
 .modal-close {
     position: absolute;
     right: 0;
@@ -147,45 +161,56 @@ a {
     z-index: 10;
     cursor: pointer;
 }
+
 .list-terms__item-modal-middle {
     padding: 17px 15px;
 }
+
 .list-terms__item-modal-middle p {
     margin-bottom: 5px;
 }
+
 .list-terms__item-modal-bottom {
     border-top: 1px solid #C7C7C7;
     padding: 15px 20px;
-}
-.list-terms__item-modal-bottom-text {
-    display: block;
-    width: 100%;
+
     text-align: center;
     font-size: 13px;
     line-height: 15px;
     color: #E16262;
-    position: relative;
     font-weight: bold;
 }
+
+.list-terms__item-modal-bottom-text {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
 .prev {
     position: absolute;
     left: 0;
-    top: 0;
     font-size: 13px;
     color: #C7C7CC;
     cursor: pointer;
 }
+
+.favorite {
+    cursor: pointer;
+}
+
 .next {
     position: absolute;
     right: 0;
-    top: 0;
     font-size: 13px;
     color: #C7C7CC;
     cursor: pointer;
 }
+
 .next img {
     transform: rotate(180deg);
 }
+
 .arrow {
     height: 16px;
     vertical-align: middle;

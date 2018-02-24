@@ -1,4 +1,4 @@
-var termsListOriginal, termsListArray, session;
+var termsListOriginal, termsListArray, termsListArrayIDs=[], favoriteArray, session;
 
 //Получаем json
 axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
@@ -8,6 +8,7 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
     .then(function (response) {
         session = response.data.sessionId;
         getList();
+        
     })
     .catch(function (error) {
         console.log(error);
@@ -22,17 +23,37 @@ function getList() {
             }
         })
         .then(function (response) {
-
             termsListOriginal = response.data;
             createList();
+            getFavorite();
             createLettersList();
-            hideArrow()
+            hideArrow();
+            
         })
         .catch(function (error) {
 
             console.log(error);
-        });
+        })
 }
+
+
+
+function getFavorite() {
+    axios({
+            method: 'get',
+            url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
+            headers: {
+                'X-Appercode-Session-Token': session
+            }
+        })
+        .then(function (response) {
+            favoriteArray = response.data;
+            favoriteArray.forEach(function(item, i, arr){
+                $('[data-id ='+ item+']')[0].innerHTML = "Убрать из избранного";
+            }) 
+        })
+}
+
 
 // Создание списка
 
@@ -51,6 +72,7 @@ function createList() {
     var groups = document.getElementsByClassName('list-terms__group');
     var groupTitle;
     termsListArray.forEach(function (item, i, termsListArray) {
+
 
         //создание группы и хедера 
 
@@ -134,8 +156,24 @@ function createList() {
 
             var itemModalBottomText = document.createElement('div');
             itemModalBottomText.className = "list-terms__item-modal-bottom-text";
-            itemModalBottomText.innerHTML = "<div class=prev><img class=arrow src=img/arrow.svg></div>В избранное<div class=next><img class=arrow src=img/arrow.svg ></div>";
-            itemModalBottom.appendChild(itemModalBottomText);
+            itemModalBottom.appendChild(itemModalBottomText)
+
+            var prev = document.createElement('div');
+            prev.className = "prev";
+            prev.innerHTML = "<img class=arrow src=img/arrow.svg>"
+            itemModalBottomText.appendChild(prev);
+
+            var favorite = document.createElement('div');
+            favorite.classList = "js-favorite favorite";
+            favorite.innerHTML = "В избранное";
+            favorite.setAttribute('data-id', termsListArray[i].id);
+            itemModalBottomText.appendChild(favorite);
+
+            var next = document.createElement('div');
+            next.className = "next";
+            next.innerHTML = "<img class=arrow src=img/arrow.svg>"
+            itemModalBottomText.appendChild(next);
+
 
         }
     });
@@ -406,7 +444,51 @@ function NextModal(eventNext) {
     }
 }
 
+
+// Добавление-удаление избранного 
+
+function toggleFavorite(event) {
+    var target = event.target;
+
+    if (target.classList.contains("js-favorite")) {
+
+        var id = target.getAttribute("data-id");
+        var url = "http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
+
+        if (!target.hasAttribute("data-favorite")) {
+
+            target.setAttribute("data-favorite", "true");
+            target.innerHTML = "Убрать из избранного";
+
+            axios({
+                method: 'post',
+                url: url,
+                headers: {
+                    'X-Appercode-Session-Token': session
+                }
+            })
+
+        } else {
+
+            target.removeAttribute("data-favorite");
+            target.innerHTML = "В избранное";
+
+            axios({
+                method: 'delete',
+                url: url,
+                headers: {
+                    'X-Appercode-Session-Token': session
+                }
+            })
+        }
+
+
+
+    }
+}
+
 list.addEventListener("click", CloseModal);
 list.addEventListener("click", OpenModal);
 list.addEventListener("click", NextModal);
 list.addEventListener("click", PrevModal);
+list.addEventListener("click", toggleFavorite)
