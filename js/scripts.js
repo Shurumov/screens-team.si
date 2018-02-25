@@ -1,4 +1,4 @@
-var termsListOriginal, termsListArray, termsListArrayIDs=[], favoriteArray, session;
+var termsListOriginal, termsListArray, favoriteArray, session;
 
 //Получаем json
 axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
@@ -8,7 +8,7 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
     .then(function (response) {
         session = response.data.sessionId;
         getList();
-        
+
     })
     .catch(function (error) {
         console.log(error);
@@ -28,7 +28,7 @@ function getList() {
             getFavorite();
             createLettersList();
             hideArrow();
-            
+
         })
         .catch(function (error) {
 
@@ -48,9 +48,9 @@ function getFavorite() {
         })
         .then(function (response) {
             favoriteArray = response.data;
-            favoriteArray.forEach(function(item, i, arr){
-                $('[data-id ='+ item+']')[0].innerHTML = "Убрать из избранного";
-            }) 
+            favoriteArray.forEach(function (item, i, arr) {
+                $('[data-id =' + item + ']')[0].innerHTML = "Убрать из избранного";
+            })
         })
 }
 
@@ -237,7 +237,7 @@ function showArrow() {
 
 }
 
-// Удаление бордера у первого элемента группы 
+
 
 
 
