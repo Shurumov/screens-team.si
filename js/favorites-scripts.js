@@ -1,5 +1,6 @@
 var termsListOriginal, termsListArray, termsListArrayIDs = [],
-    favoriteArray, session;
+    favoriteArray = [],
+    favoriteArrayIDs, session;
 
 //Получаем json
 axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
@@ -8,33 +9,15 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
     })
     .then(function (response) {
         session = response.data.sessionId;
-        getList();
-
+        getFavorite();
+        
     })
-    .catch(function (error) {
-        console.log(error);
-    });
 
-function getList() {
-    axios({
-            method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=600',
-            headers: {
-                'X-Appercode-Session-Token': session
-            }
-        })
-        .then(function (response) {
-            termsListOriginal = response.data;
-            getFavorite();
-            createList();
-            createLettersList();
-            hideArrow();
-        })
-        .catch(function (error) {
+.catch(function (error) {
+    console.log(error);
+});
 
-            console.log(error);
-        })
-}
+
 
 
 
@@ -47,13 +30,38 @@ function getFavorite() {
                 'X-Appercode-Session-Token': session
             }
         })
-        .then(function (response) {
-            favoriteArray = response.data;
-            favoriteArray.forEach(function (item, i, arr) {
-                $('[data-id =' + item + ']')[0].innerHTML = "Убрать из избранного";
-            });
-            console.log("fav");
-            console.log(favoriteArray);
+        .then(response => {
+
+            favoriteArrayIDs = response.data;
+            
+            return favoriteArrayIDs
+        })
+        .then(favoriteArrayIDs => {
+
+            favoriteArrayIDs.forEach(function (item, i, arr) {
+                axios({
+                        method: 'get',
+                        url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations/' + item,
+                        headers: {
+                            'X-Appercode-Session-Token': session
+                        }
+                    })
+                    .then(response => {
+                        
+                        favoriteArray.push(response.data);
+                        
+                        if (favoriteArray.length == favoriteArrayIDs.length) {
+                            createList();
+                            createLettersList();
+                            hideArrow();
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            })
+
 
         })
         .catch(function (error) {
@@ -61,7 +69,6 @@ function getFavorite() {
             console.log(error);
         });
 
-    return favoriteArray
 }
 
 
@@ -71,11 +78,8 @@ var listTermsElements = document.getElementsByClassName('list-terms__elements')[
 
 function createList() {
 
-    console.log("cre");
-    console.log(favoriteArray);
-    //сортируем массив
 
-    termsListArray = termsListOriginal.slice().sort(function (one, two) {
+    favoriteArray = favoriteArray.slice().sort(function (one, two) {
         if (one.title < two.title) return -1;
         if (one.title > two.title) return 1;
         return 0;
@@ -85,12 +89,12 @@ function createList() {
 
     var groups = document.getElementsByClassName('list-terms__group');
     var groupTitle;
-    termsListArray.forEach(function (item, i, termsListArray) {
+    favoriteArray.forEach(function (item, i, favoriteArray) {
 
         //создание группы и хедера 
 
-        if (termsListArray[i].title.charAt(0) != groupTitle) {
-            groupTitle = termsListArray[i].title.charAt(0);
+        if (favoriteArray[i].title.charAt(0) != groupTitle) {
+            groupTitle = favoriteArray[i].title.charAt(0);
 
             var group = document.createElement('div');
             group.className = "list-terms__group";
@@ -102,13 +106,13 @@ function createList() {
 
             var text = document.createElement('a');
             text.className = "js-group-header";
-            text.innerHTML = termsListArray[i].title.charAt(0);
+            text.innerHTML = favoriteArray[i].title.charAt(0);
             header.appendChild(text);
         }
 
         // создание блоков терминов
 
-        if (termsListArray[i].title && termsListArray[i].html) {
+        if (favoriteArray[i].title && favoriteArray[i].html) {
 
             var itemWrapper = document.createElement('div');
             itemWrapper.className = "list-terms__item_wrapper js-show-hide";
@@ -120,12 +124,12 @@ function createList() {
 
             var itemTitle = document.createElement('div');
             itemTitle.className = "list-terms__item-title js-search";
-            itemTitle.innerHTML = termsListArray[i].title;
+            itemTitle.innerHTML = favoriteArray[i].title;
             item.appendChild(itemTitle);
 
             var itemSubtitle = document.createElement('div');
             itemSubtitle.className = "list-terms__item-subtitle";
-            itemSubtitle.innerHTML = stringTruncation(termsListArray[i].html, 30);
+            itemSubtitle.innerHTML = stringTruncation(favoriteArray[i].html, 30);
             item.appendChild(itemSubtitle);
 
             //Модальное окно
@@ -146,7 +150,7 @@ function createList() {
 
             var itemModalTitle = document.createElement('div');
             itemModalTitle.className = "list-terms__item-modal-title";
-            itemModalTitle.innerHTML = stringTruncation(termsListArray[i].title, 25);
+            itemModalTitle.innerHTML = stringTruncation(favoriteArray[i].title, 25);
             itemModalTop.appendChild(itemModalTitle);
 
             var itemModalClose = document.createElement('a');
@@ -158,7 +162,7 @@ function createList() {
 
             var itemModalMiddle = document.createElement('div');
             itemModalMiddle.className = "list-terms__item-modal-middle";
-            itemModalMiddle.innerHTML = termsListArray[i].html;
+            itemModalMiddle.innerHTML = favoriteArray[i].html;
             itemContent.appendChild(itemModalMiddle);
 
             //Футтер модального окна
@@ -178,8 +182,9 @@ function createList() {
 
             var favorite = document.createElement('div');
             favorite.classList = "js-favorite favorite";
-            favorite.innerHTML = "В избранное";
-            favorite.setAttribute('data-id', termsListArray[i].id);
+            favorite.innerHTML = "Удалить из избранного";
+            favorite.setAttribute("data-favorite", "true");
+            favorite.setAttribute('data-id', favoriteArray[i].id);
             itemModalBottomText.appendChild(favorite);
 
             var next = document.createElement('div');
@@ -250,7 +255,6 @@ function showArrow() {
 
 }
 
-// Удаление бордера у первого элемента группы 
 
 
 

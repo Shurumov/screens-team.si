@@ -25,7 +25,7 @@ function getList() {
         .then(function (response) {
             termsListOriginal = response.data;
             createList();
-            getFavorite();
+            
             createLettersList();
             hideArrow();
 
@@ -48,6 +48,7 @@ function getFavorite() {
         })
         .then(function (response) {
             favoriteArray = response.data;
+        
             favoriteArray.forEach(function (item, i, arr) {
                 $('[data-id =' + item + ']')[0].innerHTML = "Убрать из избранного";
             })
@@ -177,6 +178,7 @@ function createList() {
 
         }
     });
+    getFavorite();
 }
 
 //Создание алфавита справа 
