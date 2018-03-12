@@ -25,7 +25,7 @@ function getFavorite() {
 
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
+            url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -41,7 +41,7 @@ function getFavorite() {
             favoriteArrayIDs.forEach(function (item, i, arr) {
                 axios({
                         method: 'get',
-                        url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations/' + item,
+                        url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations/' + item,
                         headers: {
                             'X-Appercode-Session-Token': session
                         }
@@ -474,31 +474,29 @@ function toggleFavorite(event) {
 
         if (!target.hasAttribute("data-favorite")) {
 
+            target.setAttribute("data-favorite", "true");
+            target.innerHTML = "Убрать из избранного";
+
             axios({
-                    method: 'post',
-                    url: url,
-                    headers: {
-                        'X-Appercode-Session-Token': session
-                    }
-                })
-                .then(function (response) {
-                    target.setAttribute("data-favorite", "true");
-                    target.innerHTML = "Убрать из избранного";
-                })
+                method: 'post',
+                url: url,
+                headers: {
+                    'X-Appercode-Session-Token': session
+                }
+            })
 
         } else {
-            
+
+            target.removeAttribute("data-favorite");
+            target.innerHTML = "В избранное";
+
             axios({
-                    method: 'delete',
-                    url: url,
-                    headers: {
-                        'X-Appercode-Session-Token': session
-                    }
-                })
-                .then(function (response) {
-                    target.removeAttribute("data-favorite");
-                    target.innerHTML = "В избранное";
-                })
+                method: 'delete',
+                url: url,
+                headers: {
+                    'X-Appercode-Session-Token': session
+                }
+            })
         }
 
 

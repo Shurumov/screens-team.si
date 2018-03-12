@@ -50,7 +50,7 @@ function getFavorite() {
             favoriteArray = response.data;
 
             favoriteArray.forEach(function (item, i, arr) {
-                $('[data-id =' + item + ']')[0].innerHTML = "Убрать из избранного";
+                $('[data-id =' + item + ']')[0].setAttribute("data-favorite", "true");
             })
         })
 }
@@ -97,6 +97,9 @@ function createList() {
 
             var item = document.createElement('a');
             item.className = "list-terms__item";
+            item.setAttribute("data-title", termsListArray[i].title);
+            item.setAttribute("data-description", termsListArray[i].html);
+            item.setAttribute("data-id", termsListArray[i].id);
             itemWrapper.appendChild(item);
 
             var itemTitle = document.createElement('div');
@@ -108,66 +111,6 @@ function createList() {
             itemSubtitle.className = "list-terms__item-subtitle";
             itemSubtitle.innerHTML = stringTruncation(termsListArray[i].html, 30);
             item.appendChild(itemSubtitle);
-
-            //Модальное окно
-
-            var itemModal = document.createElement('div');
-            itemModal.className = "list-terms__item-modal";
-            itemWrapper.appendChild(itemModal);
-
-            var itemContent = document.createElement('div');
-            itemContent.className = "list-terms__item-modal-content";
-            itemModal.appendChild(itemContent);
-
-            //Хедер модального окна
-
-            var itemModalTop = document.createElement('div');
-            itemModalTop.className = "list-terms__item-modal-top";
-            itemContent.appendChild(itemModalTop);
-
-            var itemModalTitle = document.createElement('div');
-            itemModalTitle.className = "list-terms__item-modal-title";
-            itemModalTitle.innerHTML = stringTruncation(termsListArray[i].title, 25);
-            itemModalTop.appendChild(itemModalTitle);
-
-            var itemModalClose = document.createElement('a');
-            itemModalClose.className = "modal-close";
-            itemModalClose.innerHTML = "<img src=img/close.svg >";
-            itemModalTitle.appendChild(itemModalClose);
-
-            //Середина модального окна
-
-            var itemModalMiddle = document.createElement('div');
-            itemModalMiddle.className = "list-terms__item-modal-middle";
-            itemModalMiddle.innerHTML = termsListArray[i].html;
-            itemContent.appendChild(itemModalMiddle);
-
-            //Футтер модального окна
-
-            var itemModalBottom = document.createElement('div');
-            itemModalBottom.className = "list-terms__item-modal-bottom";
-            itemContent.appendChild(itemModalBottom);
-
-            var itemModalBottomText = document.createElement('div');
-            itemModalBottomText.className = "list-terms__item-modal-bottom-text";
-            itemModalBottom.appendChild(itemModalBottomText)
-
-            var prev = document.createElement('div');
-            prev.className = "prev";
-            prev.innerHTML = "<img class=arrow src=img/arrow.svg>"
-            itemModalBottomText.appendChild(prev);
-
-            var favorite = document.createElement('div');
-            favorite.classList = "js-favorite favorite";
-            favorite.innerHTML = "В избранное";
-            favorite.setAttribute('data-id', termsListArray[i].id);
-            itemModalBottomText.appendChild(favorite);
-
-            var next = document.createElement('div');
-            next.className = "next";
-            next.innerHTML = "<img class=arrow src=img/arrow.svg>"
-            itemModalBottomText.appendChild(next);
-
 
         }
     });
@@ -211,30 +154,26 @@ function createLettersList() {
 // Удаление и добавленеи стрелок в первом и последнем модальном окне
 
 function hideArrow() {
-    var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].lastChild.lastChild.lastChild.lastChild.firstChild;
-
-    firstArrow.style.display = "none";
+    var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].firstChild;
+    firstArrow.setAttribute("data-first_item", "true");
+    
 
     var lastArrowArray = document.getElementsByClassName("list-terms__item_wrapper");
-    var lastArrow = lastArrowArray[lastArrowArray.length - 1].lastChild.lastChild.lastChild.lastChild.lastChild;
-    lastArrow.style.display = "none"
+    var lastArrow = lastArrowArray[lastArrowArray.length - 1].firstChild;
+    lastArrow.setAttribute("data-last_item", "true");
 
 }
 
 function showArrow() {
-    var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].lastChild.lastChild.lastChild.lastChild.firstChild;
+    var firstArrow = document.getElementsByClassName("list-terms__item")[0];
 
-    firstArrow.style.display = "block";
+    firstArrow.removeAttribute("data-first_item");
 
-    var lastArrowArray = document.getElementsByClassName("list-terms__item_wrapper");
-    var lastArrow = lastArrowArray[lastArrowArray.length - 1].lastChild.lastChild.lastChild.lastChild.lastChild;
-    lastArrow.style.display = "block"
+    var lastArrowArray = document.getElementsByClassName("list-terms__item");
+    var lastArrow = lastArrowArray[lastArrowArray.length - 1];
+    lastArrow.removeAttribute("data-last_item");
 
 }
-
-
-
-
 
 
 //пролистывание списка при наведении на буквы
@@ -338,30 +277,113 @@ var search = debounce(searchTerm, 500);
 
 var list = document.getElementsByClassName("list-terms__elements")[0];
 
-function OpenModal(event) {
-    var target = event.target;
+function CreateModal(title, description, id, target, favorite, first, last) {
+   
+        //Модальное окно
 
+    var itemModal = document.createElement('div');
+    itemModal.className = "list-terms__item-modal";
+    target.appendChild(itemModal);
 
-    if (target.parentNode.classList.contains("list-terms__item")) {
-        target = target.parentNode;;
+    var itemContent = document.createElement('div');
+    itemContent.className = "list-terms__item-modal-content";
+    itemModal.appendChild(itemContent);
+
+    //Хедер модального окна
+
+    var itemModalTop = document.createElement('div');
+    itemModalTop.className = "list-terms__item-modal-top";
+    itemContent.appendChild(itemModalTop);
+
+    var itemModalTitle = document.createElement('div');
+    itemModalTitle.className = "list-terms__item-modal-title";
+    itemModalTitle.innerHTML = stringTruncation(title, 25);
+    itemModalTop.appendChild(itemModalTitle);
+
+    var itemModalClose = document.createElement('a');
+    itemModalClose.className = "modal-close";
+    itemModalClose.innerHTML = "<img src=img/close.svg >";
+    itemModalTitle.appendChild(itemModalClose);
+
+    //Середина модального окна
+
+    var itemModalMiddle = document.createElement('div');
+    itemModalMiddle.className = "list-terms__item-modal-middle";
+    itemModalMiddle.innerHTML = description;
+    itemContent.appendChild(itemModalMiddle);
+
+    //Футтер модального окна
+
+    var itemModalBottom = document.createElement('div');
+    itemModalBottom.className = "list-terms__item-modal-bottom";
+    itemContent.appendChild(itemModalBottom);
+
+    var itemModalBottomText = document.createElement('div');
+    itemModalBottomText.className = "list-terms__item-modal-bottom-text";
+    itemModalBottom.appendChild(itemModalBottomText)
+    
+    
+    
+    var prev = document.createElement('div');
+    prev.className = "prev";
+    prev.innerHTML = "<img class=arrow src=img/arrow.svg>"
+    itemModalBottomText.appendChild(prev);
+    
+    if(first){
+        console.log(first)
+        prev.style.display="none"
     }
 
+    
+    if (favorite)
 
+    {
+        var favorite = document.createElement('div');
+        favorite.classList = "js-favorite favorite";
+        favorite.innerHTML = "Убрать из избранного";
+        favorite.setAttribute('data-id', id);
+        itemModalBottomText.appendChild(favorite);
+    } else {
+        var favorite = document.createElement('div');
+        favorite.classList = "js-favorite favorite";
+        favorite.innerHTML = "В избранное";
+        favorite.setAttribute('data-id', id);
+        itemModalBottomText.appendChild(favorite);
+    }
+
+    var next = document.createElement('div');
+    next.className = "next";
+    next.innerHTML = "<img class=arrow src=img/arrow.svg>"
+    itemModalBottomText.appendChild(next);
+    
+    if(last){
+        next.style.display="none"
+    }
+}
+
+function OpenModal(event) {
+    var target = event.target;
+    
+
+    if (target.parentNode.classList.contains("list-terms__item")) {
+        target = target.parentNode;
+    }
 
     if (target.classList.contains("list-terms__item")) {
-        target.parentNode.childNodes[1].style.display = "block";
+
+        CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode, target.getAttribute("data-favorite"), target.getAttribute("data-first_item"), target.getAttribute("data-last_item"))
     }
 }
 
 function CloseModal(event) {
     var target = event.target;
-
+    
     if (target.parentNode.classList.contains("modal-close") || target.classList.contains("modal-close")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
+        target.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
     }
 
     if (target.classList.contains("list-terms__item-modal")) {
-        target.style.display = "none";
+        target.remove();
     }
 };
 
@@ -369,8 +391,8 @@ function PrevModal(eventPrev) {
     var target = eventPrev.target;
 
     if (target.parentNode.classList.contains("prev")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
-
+        
+        var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
 
         while (!target.classList.contains("list-terms__item_wrapper")) {
             if (target.classList.contains("list-terms__item_wrapper")) {
@@ -393,8 +415,12 @@ function PrevModal(eventPrev) {
 
             target = target.previousSibling;
         };
-
-        target.lastChild.style.display = "block";
+        
+        target = target.firstChild;
+        
+        CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode, target.getAttribute("data-favorite"), target.getAttribute("data-first_item"), target.getAttribute("data-last_item"));
+        
+        origin.remove();
     }
 }
 
@@ -402,7 +428,8 @@ function NextModal(eventNext) {
     var target = eventNext.target;
 
     if (target.parentNode.classList.contains("next")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
+        
+        var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
 
 
         while (!target.classList.contains("list-terms__item_wrapper")) {
@@ -411,7 +438,7 @@ function NextModal(eventNext) {
             }
             target = target.parentNode;
         };
-
+        
         if (target == target.parentNode.lastChild) {
 
             target = target.parentNode.nextSibling.firstChild;
@@ -434,8 +461,12 @@ function NextModal(eventNext) {
             target = target.nextSibling;
 
         };
-
-        target.lastChild.style.display = "block";
+        
+        target = target.firstChild;
+        
+        CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode, target.getAttribute("data-favorite"), target.getAttribute("data-first_item"), target.getAttribute("data-last_item"));
+        
+        origin.remove();
     }
 }
 
@@ -465,7 +496,7 @@ function toggleFavorite(event) {
                 })
 
         } else {
-            
+
             axios({
                     method: 'delete',
                     url: url,

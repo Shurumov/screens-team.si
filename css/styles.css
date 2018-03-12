@@ -121,7 +121,7 @@ a {
 
 .list-terms__item-modal {
     position: fixed;
-    display: none;
+    display: block;
     z-index: 1;
     left: 0;
     top: 0;
