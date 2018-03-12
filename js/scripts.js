@@ -475,13 +475,14 @@ function NextModal(eventNext) {
 
 function toggleFavorite(event) {
     var target = event.target;
-
+    var item = target.parentNode.parentNode.parentNode.parentNode.previousElementSibling;
+     
     if (target.classList.contains("js-favorite")) {
 
         var id = target.getAttribute("data-id");
         var url = "http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
 
-        if (!target.hasAttribute("data-favorite")) {
+        if (!item.hasAttribute("data-favorite")) {
 
             axios({
                     method: 'post',
@@ -491,7 +492,8 @@ function toggleFavorite(event) {
                     }
                 })
                 .then(function (response) {
-                    target.setAttribute("data-favorite", "true");
+                    item.setAttribute("data-favorite", "true");
+                    console.log(target);
                     target.innerHTML = "Убрать из избранного";
                 })
 
@@ -505,7 +507,7 @@ function toggleFavorite(event) {
                     }
                 })
                 .then(function (response) {
-                    target.removeAttribute("data-favorite");
+                    item.removeAttribute("data-favorite");
                     target.innerHTML = "В избранное";
                 })
         }

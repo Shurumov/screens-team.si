@@ -10,12 +10,12 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
     .then(function (response) {
         session = response.data.sessionId;
         getFavorite();
-        
+
     })
 
-.catch(function (error) {
-    console.log(error);
-});
+    .catch(function (error) {
+        console.log(error);
+    });
 
 
 
@@ -33,7 +33,7 @@ function getFavorite() {
         .then(response => {
 
             favoriteArrayIDs = response.data;
-            
+
             return favoriteArrayIDs
         })
         .then(favoriteArrayIDs => {
@@ -47,9 +47,9 @@ function getFavorite() {
                         }
                     })
                     .then(response => {
-                        
+
                         favoriteArray.push(response.data);
-                        
+
                         if (favoriteArray.length == favoriteArrayIDs.length) {
                             createList();
                             createLettersList();
@@ -113,13 +113,16 @@ function createList() {
         // создание блоков терминов
 
         if (favoriteArray[i].title && favoriteArray[i].html) {
-
             var itemWrapper = document.createElement('div');
             itemWrapper.className = "list-terms__item_wrapper js-show-hide";
             groups[groups.length - 1].appendChild(itemWrapper);
 
             var item = document.createElement('a');
             item.className = "list-terms__item";
+            item.setAttribute("data-title", favoriteArray[i].title);
+            item.setAttribute("data-description", favoriteArray[i].html);
+            item.setAttribute("data-favorite", "true");
+            item.setAttribute("data-id", favoriteArray[i].id); 
             itemWrapper.appendChild(item);
 
             var itemTitle = document.createElement('div');
@@ -131,68 +134,6 @@ function createList() {
             itemSubtitle.className = "list-terms__item-subtitle";
             itemSubtitle.innerHTML = stringTruncation(favoriteArray[i].html, 30);
             item.appendChild(itemSubtitle);
-
-            //Модальное окно
-
-            var itemModal = document.createElement('div');
-            itemModal.className = "list-terms__item-modal";
-            itemWrapper.appendChild(itemModal);
-
-            var itemContent = document.createElement('div');
-            itemContent.className = "list-terms__item-modal-content";
-            itemModal.appendChild(itemContent);
-
-            //Хедер модального окна
-
-            var itemModalTop = document.createElement('div');
-            itemModalTop.className = "list-terms__item-modal-top";
-            itemContent.appendChild(itemModalTop);
-
-            var itemModalTitle = document.createElement('div');
-            itemModalTitle.className = "list-terms__item-modal-title";
-            itemModalTitle.innerHTML = stringTruncation(favoriteArray[i].title, 25);
-            itemModalTop.appendChild(itemModalTitle);
-
-            var itemModalClose = document.createElement('a');
-            itemModalClose.className = "modal-close";
-            itemModalClose.innerHTML = "<img src=img/close.svg >";
-            itemModalTitle.appendChild(itemModalClose);
-
-            //Середина модального окна
-
-            var itemModalMiddle = document.createElement('div');
-            itemModalMiddle.className = "list-terms__item-modal-middle";
-            itemModalMiddle.innerHTML = favoriteArray[i].html;
-            itemContent.appendChild(itemModalMiddle);
-
-            //Футтер модального окна
-
-            var itemModalBottom = document.createElement('div');
-            itemModalBottom.className = "list-terms__item-modal-bottom";
-            itemContent.appendChild(itemModalBottom);
-
-            var itemModalBottomText = document.createElement('div');
-            itemModalBottomText.className = "list-terms__item-modal-bottom-text";
-            itemModalBottom.appendChild(itemModalBottomText)
-
-            var prev = document.createElement('div');
-            prev.className = "prev";
-            prev.innerHTML = "<img class=arrow src=img/arrow.svg>"
-            itemModalBottomText.appendChild(prev);
-
-            var favorite = document.createElement('div');
-            favorite.classList = "js-favorite favorite";
-            favorite.innerHTML = "Удалить из избранного";
-            favorite.setAttribute("data-favorite", "true");
-            favorite.setAttribute('data-id', favoriteArray[i].id);
-            itemModalBottomText.appendChild(favorite);
-
-            var next = document.createElement('div');
-            next.className = "next";
-            next.innerHTML = "<img class=arrow src=img/arrow.svg>"
-            itemModalBottomText.appendChild(next);
-
-
         }
     });
 }
@@ -234,30 +175,26 @@ function createLettersList() {
 // Удаление и добавленеи стрелок в первом и последнем модальном окне
 
 function hideArrow() {
-    var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].lastChild.lastChild.lastChild.lastChild.firstChild;
+    var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].firstChild;
+    firstArrow.setAttribute("data-first_item", "true");
 
-    firstArrow.style.display = "none";
 
     var lastArrowArray = document.getElementsByClassName("list-terms__item_wrapper");
-    var lastArrow = lastArrowArray[lastArrowArray.length - 1].lastChild.lastChild.lastChild.lastChild.lastChild;
-    lastArrow.style.display = "none"
+    var lastArrow = lastArrowArray[lastArrowArray.length - 1].firstChild;
+    lastArrow.setAttribute("data-last_item", "true");
 
 }
 
 function showArrow() {
-    var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].lastChild.lastChild.lastChild.lastChild.firstChild;
+    var firstArrow = document.getElementsByClassName("list-terms__item")[0];
 
-    firstArrow.style.display = "block";
+    firstArrow.removeAttribute("data-first_item");
 
-    var lastArrowArray = document.getElementsByClassName("list-terms__item_wrapper");
-    var lastArrow = lastArrowArray[lastArrowArray.length - 1].lastChild.lastChild.lastChild.lastChild.lastChild;
-    lastArrow.style.display = "block"
+    var lastArrowArray = document.getElementsByClassName("list-terms__item");
+    var lastArrow = lastArrowArray[lastArrowArray.length - 1];
+    lastArrow.removeAttribute("data-last_item");
 
 }
-
-
-
-
 
 //пролистывание списка при наведении на буквы
 
@@ -360,30 +297,113 @@ var search = debounce(searchTerm, 500);
 
 var list = document.getElementsByClassName("list-terms__elements")[0];
 
-function OpenModal(event) {
-    var target = event.target;
+function CreateModal(title, description, id, target, favorite, first, last) {
+   
+        //Модальное окно
 
+    var itemModal = document.createElement('div');
+    itemModal.className = "list-terms__item-modal";
+    target.appendChild(itemModal);
 
-    if (target.parentNode.classList.contains("list-terms__item")) {
-        target = target.parentNode;;
+    var itemContent = document.createElement('div');
+    itemContent.className = "list-terms__item-modal-content";
+    itemModal.appendChild(itemContent);
+
+    //Хедер модального окна
+
+    var itemModalTop = document.createElement('div');
+    itemModalTop.className = "list-terms__item-modal-top";
+    itemContent.appendChild(itemModalTop);
+
+    var itemModalTitle = document.createElement('div');
+    itemModalTitle.className = "list-terms__item-modal-title";
+    itemModalTitle.innerHTML = stringTruncation(title, 25);
+    itemModalTop.appendChild(itemModalTitle);
+
+    var itemModalClose = document.createElement('a');
+    itemModalClose.className = "modal-close";
+    itemModalClose.innerHTML = "<img src=img/close.svg >";
+    itemModalTitle.appendChild(itemModalClose);
+
+    //Середина модального окна
+
+    var itemModalMiddle = document.createElement('div');
+    itemModalMiddle.className = "list-terms__item-modal-middle";
+    itemModalMiddle.innerHTML = description;
+    itemContent.appendChild(itemModalMiddle);
+
+    //Футтер модального окна
+
+    var itemModalBottom = document.createElement('div');
+    itemModalBottom.className = "list-terms__item-modal-bottom";
+    itemContent.appendChild(itemModalBottom);
+
+    var itemModalBottomText = document.createElement('div');
+    itemModalBottomText.className = "list-terms__item-modal-bottom-text";
+    itemModalBottom.appendChild(itemModalBottomText)
+    
+    
+    
+    var prev = document.createElement('div');
+    prev.className = "prev";
+    prev.innerHTML = "<img class=arrow src=img/arrow.svg>"
+    itemModalBottomText.appendChild(prev);
+    
+    if(first){
+        console.log(first)
+        prev.style.display="none"
     }
 
+    
+    if (favorite)
 
+    {
+        var favorite = document.createElement('div');
+        favorite.classList = "js-favorite favorite";
+        favorite.innerHTML = "Убрать из избранного";
+        favorite.setAttribute('data-id', id);
+        itemModalBottomText.appendChild(favorite);
+    } else {
+        var favorite = document.createElement('div');
+        favorite.classList = "js-favorite favorite";
+        favorite.innerHTML = "В избранное";
+        favorite.setAttribute('data-id', id);
+        itemModalBottomText.appendChild(favorite);
+    }
 
-    if (target.classList.contains("list-terms__item")) {
-        target.parentNode.childNodes[1].style.display = "block";
+    var next = document.createElement('div');
+    next.className = "next";
+    next.innerHTML = "<img class=arrow src=img/arrow.svg>"
+    itemModalBottomText.appendChild(next);
+    
+    if(last){
+        next.style.display="none"
     }
 }
 
+function OpenModal(event) {
+    var target = event.target;
+    
+
+    if (target.parentNode.classList.contains("list-terms__item")) {
+        target = target.parentNode;
+    }
+
+    if (target.classList.contains("list-terms__item")) {
+
+        CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode, target.getAttribute("data-favorite"), target.getAttribute("data-first_item"), target.getAttribute("data-last_item"))
+    }
+};
+
 function CloseModal(event) {
     var target = event.target;
-
+    
     if (target.parentNode.classList.contains("modal-close") || target.classList.contains("modal-close")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
+        target.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
     }
 
     if (target.classList.contains("list-terms__item-modal")) {
-        target.style.display = "none";
+        target.remove();
     }
 };
 
@@ -391,8 +411,8 @@ function PrevModal(eventPrev) {
     var target = eventPrev.target;
 
     if (target.parentNode.classList.contains("prev")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
-
+        
+        var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
 
         while (!target.classList.contains("list-terms__item_wrapper")) {
             if (target.classList.contains("list-terms__item_wrapper")) {
@@ -415,8 +435,12 @@ function PrevModal(eventPrev) {
 
             target = target.previousSibling;
         };
-
-        target.lastChild.style.display = "block";
+        
+        target = target.firstChild;
+        
+        CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode, target.getAttribute("data-favorite"), target.getAttribute("data-first_item"), target.getAttribute("data-last_item"));
+        
+        origin.remove();
     }
 }
 
@@ -424,7 +448,8 @@ function NextModal(eventNext) {
     var target = eventNext.target;
 
     if (target.parentNode.classList.contains("next")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = "none";
+        
+        var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
 
 
         while (!target.classList.contains("list-terms__item_wrapper")) {
@@ -433,7 +458,7 @@ function NextModal(eventNext) {
             }
             target = target.parentNode;
         };
-
+        
         if (target == target.parentNode.lastChild) {
 
             target = target.parentNode.nextSibling.firstChild;
@@ -456,53 +481,63 @@ function NextModal(eventNext) {
             target = target.nextSibling;
 
         };
-
-        target.lastChild.style.display = "block";
+        
+        target = target.firstChild;
+        
+        CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode, target.getAttribute("data-favorite"), target.getAttribute("data-first_item"), target.getAttribute("data-last_item"));
+        
+        origin.remove();
     }
 }
+
 
 
 // Добавление-удаление избранного 
 
 function toggleFavorite(event) {
     var target = event.target;
-
+    var item = target.parentNode.parentNode.parentNode.parentNode.previousElementSibling;
+     
     if (target.classList.contains("js-favorite")) {
 
         var id = target.getAttribute("data-id");
         var url = "http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
 
-        if (!target.hasAttribute("data-favorite")) {
-
-            target.setAttribute("data-favorite", "true");
-            target.innerHTML = "Убрать из избранного";
+        if (!item.hasAttribute("data-favorite")) {
 
             axios({
-                method: 'post',
-                url: url,
-                headers: {
-                    'X-Appercode-Session-Token': session
-                }
-            })
+                    method: 'post',
+                    url: url,
+                    headers: {
+                        'X-Appercode-Session-Token': session
+                    }
+                })
+                .then(function (response) {
+                    item.setAttribute("data-favorite", "true");
+                    console.log(target);
+                    target.innerHTML = "Убрать из избранного";
+                })
 
         } else {
 
-            target.removeAttribute("data-favorite");
-            target.innerHTML = "В избранное";
-
             axios({
-                method: 'delete',
-                url: url,
-                headers: {
-                    'X-Appercode-Session-Token': session
-                }
-            })
+                    method: 'delete',
+                    url: url,
+                    headers: {
+                        'X-Appercode-Session-Token': session
+                    }
+                })
+                .then(function (response) {
+                    item.removeAttribute("data-favorite");
+                    target.innerHTML = "В избранное";
+                })
         }
 
 
 
     }
 }
+
 
 list.addEventListener("click", CloseModal);
 list.addEventListener("click", OpenModal);
