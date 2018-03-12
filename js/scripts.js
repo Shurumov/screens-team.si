@@ -1,4 +1,4 @@
-var termsListOriginal, termsListArray, favoriteArray, session;
+var termsListArray, favoriteArray, session;
 
 //Получаем json
 axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
@@ -17,15 +17,15 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
 function getList() {
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=600',
+            url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=800&order=title',
             headers: {
                 'X-Appercode-Session-Token': session
             }
         })
         .then(function (response) {
-            termsListOriginal = response.data;
+            termsListArray = response.data;
             createList();
-            
+
             createLettersList();
             hideArrow();
 
@@ -48,7 +48,7 @@ function getFavorite() {
         })
         .then(function (response) {
             favoriteArray = response.data;
-        
+
             favoriteArray.forEach(function (item, i, arr) {
                 $('[data-id =' + item + ']')[0].innerHTML = "Убрать из избранного";
             })
@@ -61,13 +61,6 @@ function getFavorite() {
 var listTermsElements = document.getElementsByClassName('list-terms__elements')[0];
 
 function createList() {
-    //сортируем массив
-
-    termsListArray = termsListOriginal.slice().sort(function (one, two) {
-        if (one.title < two.title) return -1;
-        if (one.title > two.title) return 1;
-        return 0;
-    });
 
 
     var groups = document.getElementsByClassName('list-terms__group');
@@ -459,29 +452,31 @@ function toggleFavorite(event) {
 
         if (!target.hasAttribute("data-favorite")) {
 
-            target.setAttribute("data-favorite", "true");
-            target.innerHTML = "Убрать из избранного";
-
             axios({
-                method: 'post',
-                url: url,
-                headers: {
-                    'X-Appercode-Session-Token': session
-                }
-            })
+                    method: 'post',
+                    url: url,
+                    headers: {
+                        'X-Appercode-Session-Token': session
+                    }
+                })
+                .then(function (response) {
+                    target.setAttribute("data-favorite", "true");
+                    target.innerHTML = "Убрать из избранного";
+                })
 
         } else {
-
-            target.removeAttribute("data-favorite");
-            target.innerHTML = "В избранное";
-
+            
             axios({
-                method: 'delete',
-                url: url,
-                headers: {
-                    'X-Appercode-Session-Token': session
-                }
-            })
+                    method: 'delete',
+                    url: url,
+                    headers: {
+                        'X-Appercode-Session-Token': session
+                    }
+                })
+                .then(function (response) {
+                    target.removeAttribute("data-favorite");
+                    target.innerHTML = "В избранное";
+                })
         }
 
 
