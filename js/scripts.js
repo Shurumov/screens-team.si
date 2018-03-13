@@ -239,7 +239,7 @@ function stringTruncation(str, maxLength) {
 
 function searchTerm() {
     showArrow();
-
+    
     var input, filter, search, item, a;
     input = document.getElementById('search');
     filter = input.value.toUpperCase();
@@ -477,6 +477,29 @@ function NextModal(eventNext) {
 
 // Добавление-удаление избранного 
 
+
+function startLoadingAnimation() // - функция запуска анимации
+{
+  // найдем элемент с изображением загрузки и уберем невидимость:
+  var imgObj = $("#loadImg");
+  imgObj.show();
+ 
+  // вычислим в какие координаты нужно поместить изображение загрузки,
+  // чтобы оно оказалось в серидине страницы:
+  var centerY = $(window).scrollTop() + ($(window).height() + imgObj.height())/2;
+  var centerX = $(window).scrollLeft() + ($(window).width() + imgObj.width())/2;
+ 
+  // поменяем координаты изображения на нужные:
+//  imgObj.offset(top:centerY,left:centerX);
+};
+ 
+function stopLoadingAnimation() // - функция останавливающая анимацию
+{
+  $("#loadImg").hide();
+}
+
+
+
 function toggleFavorite(event) {
     var target = event.target;
     var item = target.parentNode.parentNode.parentNode.parentNode.previousElementSibling;
@@ -485,9 +508,10 @@ function toggleFavorite(event) {
 
         var id = target.getAttribute("data-id");
         var url = "http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
+        startLoadingAnimation();
 
         if (!item.hasAttribute("data-favorite")) {
-
+            
             axios({
                     method: 'post',
                     url: url,
@@ -496,12 +520,12 @@ function toggleFavorite(event) {
                     }
                 })
                 .then(function (response) {
+                    stopLoadingAnimation();
                     item.setAttribute("data-favorite", "true");
                     target.innerHTML = "Убрать из избранного";
                 })
 
         } else {
-
             axios({
                     method: 'delete',
                     url: url,
@@ -510,6 +534,7 @@ function toggleFavorite(event) {
                     }
                 })
                 .then(function (response) {
+                    stopLoadingAnimation();
                     item.removeAttribute("data-favorite");
                     target.innerHTML = "В избранное";
                 })

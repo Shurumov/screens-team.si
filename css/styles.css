@@ -215,3 +215,7 @@ a {
     height: 16px;
     vertical-align: middle;
 }
+
+#loadImg{
+    display: none;
+}
