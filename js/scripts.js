@@ -1,4 +1,7 @@
+
+
 var termsListArray, favoriteArray, session;
+startLoadingAnimation();
 
 //Получаем json
 axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
@@ -24,6 +27,7 @@ function getList() {
         })
         .then(function (response) {
             termsListArray = response.data;
+            
             createList();
             createLettersList();
             var screenHeight = screen.height,
@@ -120,6 +124,7 @@ function createList() {
         }
     });
     getFavorite();
+    stopLoadingAnimation();
 }
 
 //Создание алфавита справа 
@@ -214,6 +219,7 @@ listTerms.addEventListener("mouseover", toHeader);
 // Вспомогательные функции
 
 function debounce(f, ms) {
+    
     var timer = null;
     return function (...args) {
         var onComplete = function () {
@@ -235,9 +241,31 @@ function stringTruncation(str, maxLength) {
     return str;
 }
 
+// функция запускающая анимацию
+
+function startLoadingAnimation() 
+{
+  
+  var imgObj = $("#loadImg");
+  imgObj.show();
+ 
+  var centerY = $(window).scrollTop() + ($(window).height() + imgObj.height())/2;
+  var centerX = $(window).scrollLeft() + ($(window).width() + imgObj.width())/2;
+
+  imgObj.offset({top:centerY,left:centerX});
+};
+
+// функция останавливающая анимацию
+
+function stopLoadingAnimation() 
+{
+  $("#loadImg").hide();
+}
+
 //Поиск и фильтрация из input
 
 function searchTerm() {
+    
     showArrow();
     
     var input, filter, search, item, a;
@@ -274,7 +302,7 @@ function searchTerm() {
 
     createLettersList();
     hideArrow();
-
+    stopLoadingAnimation();
 
 };
 
@@ -475,29 +503,9 @@ function NextModal(eventNext) {
 }
 
 
+
+
 // Добавление-удаление избранного 
-
-
-function startLoadingAnimation() // - функция запуска анимации
-{
-  // найдем элемент с изображением загрузки и уберем невидимость:
-  var imgObj = $("#loadImg");
-  imgObj.show();
- 
-  // вычислим в какие координаты нужно поместить изображение загрузки,
-  // чтобы оно оказалось в серидине страницы:
-  var centerY = $(window).scrollTop() + ($(window).height() + imgObj.height())/2;
-  var centerX = $(window).scrollLeft() + ($(window).width() + imgObj.width())/2;
- 
-  // поменяем координаты изображения на нужные:
-//  imgObj.offset(top:centerY,left:centerX);
-};
- 
-function stopLoadingAnimation() // - функция останавливающая анимацию
-{
-  $("#loadImg").hide();
-}
-
 
 
 function toggleFavorite(event) {
@@ -539,14 +547,15 @@ function toggleFavorite(event) {
                     target.innerHTML = "В избранное";
                 })
         }
-
-
-
     }
 }
 
+var input = document.getElementById("search");
+var inputLoader = debounce(startLoadingAnimation, 400);
+
+input.addEventListener("keyup", inputLoader);
 list.addEventListener("click", CloseModal);
 list.addEventListener("click", OpenModal);
 list.addEventListener("click", NextModal);
 list.addEventListener("click", PrevModal);
-list.addEventListener("click", toggleFavorite)
+list.addEventListener("click", toggleFavorite);

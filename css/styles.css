@@ -218,4 +218,5 @@ a {
 
 #loadImg{
     display: none;
+    z-index: 100;
 }
