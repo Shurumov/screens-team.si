@@ -25,8 +25,13 @@ function getList() {
         .then(function (response) {
             termsListArray = response.data;
             createList();
-
             createLettersList();
+            var screenHeight = screen.height,
+                alphabetHeight = document.getElementsByClassName("list-terms__letter-list")[0].offsetHeight;
+
+            if ((screenHeight - 100) < alphabetHeight) {
+               document.getElementsByClassName("list-terms__letter-list")[0].remove();
+            }
             hideArrow();
 
         })
@@ -156,7 +161,7 @@ function createLettersList() {
 function hideArrow() {
     var firstArrow = document.getElementsByClassName("list-terms__item_wrapper")[0].firstChild;
     firstArrow.setAttribute("data-first_item", "true");
-    
+
 
     var lastArrowArray = document.getElementsByClassName("list-terms__item_wrapper");
     var lastArrow = lastArrowArray[lastArrowArray.length - 1].firstChild;
@@ -278,8 +283,8 @@ var search = debounce(searchTerm, 500);
 var list = document.getElementsByClassName("list-terms__elements")[0];
 
 function CreateModal(title, description, id, target, favorite, first, last) {
-   
-        //Модальное окно
+
+    //Модальное окно
 
     var itemModal = document.createElement('div');
     itemModal.className = "list-terms__item-modal";
@@ -321,20 +326,19 @@ function CreateModal(title, description, id, target, favorite, first, last) {
     var itemModalBottomText = document.createElement('div');
     itemModalBottomText.className = "list-terms__item-modal-bottom-text";
     itemModalBottom.appendChild(itemModalBottomText)
-    
-    
-    
+
+
+
     var prev = document.createElement('div');
     prev.className = "prev";
     prev.innerHTML = "<img class=arrow src=img/arrow.svg>"
     itemModalBottomText.appendChild(prev);
-    
-    if(first){
-        console.log(first)
-        prev.style.display="none"
+
+    if (first) {
+        prev.style.display = "none"
     }
 
-    
+
     if (favorite)
 
     {
@@ -355,15 +359,15 @@ function CreateModal(title, description, id, target, favorite, first, last) {
     next.className = "next";
     next.innerHTML = "<img class=arrow src=img/arrow.svg>"
     itemModalBottomText.appendChild(next);
-    
-    if(last){
-        next.style.display="none"
+
+    if (last) {
+        next.style.display = "none"
     }
 }
 
 function OpenModal(event) {
     var target = event.target;
-    
+
 
     if (target.parentNode.classList.contains("list-terms__item")) {
         target = target.parentNode;
@@ -377,7 +381,7 @@ function OpenModal(event) {
 
 function CloseModal(event) {
     var target = event.target;
-    
+
     if (target.parentNode.classList.contains("modal-close") || target.classList.contains("modal-close")) {
         target.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
     }
@@ -391,7 +395,7 @@ function PrevModal(eventPrev) {
     var target = eventPrev.target;
 
     if (target.parentNode.classList.contains("prev")) {
-        
+
         var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
 
         while (!target.classList.contains("list-terms__item_wrapper")) {
@@ -415,11 +419,11 @@ function PrevModal(eventPrev) {
 
             target = target.previousSibling;
         };
-        
+
         target = target.firstChild;
-        
+
         CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode, target.getAttribute("data-favorite"), target.getAttribute("data-first_item"), target.getAttribute("data-last_item"));
-        
+
         origin.remove();
     }
 }
@@ -428,7 +432,7 @@ function NextModal(eventNext) {
     var target = eventNext.target;
 
     if (target.parentNode.classList.contains("next")) {
-        
+
         var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
 
 
@@ -438,7 +442,7 @@ function NextModal(eventNext) {
             }
             target = target.parentNode;
         };
-        
+
         if (target == target.parentNode.lastChild) {
 
             target = target.parentNode.nextSibling.firstChild;
@@ -461,11 +465,11 @@ function NextModal(eventNext) {
             target = target.nextSibling;
 
         };
-        
+
         target = target.firstChild;
-        
+
         CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode, target.getAttribute("data-favorite"), target.getAttribute("data-first_item"), target.getAttribute("data-last_item"));
-        
+
         origin.remove();
     }
 }
@@ -476,7 +480,7 @@ function NextModal(eventNext) {
 function toggleFavorite(event) {
     var target = event.target;
     var item = target.parentNode.parentNode.parentNode.parentNode.previousElementSibling;
-     
+
     if (target.classList.contains("js-favorite")) {
 
         var id = target.getAttribute("data-id");
@@ -493,7 +497,6 @@ function toggleFavorite(event) {
                 })
                 .then(function (response) {
                     item.setAttribute("data-favorite", "true");
-                    console.log(target);
                     target.innerHTML = "Убрать из избранного";
                 })
 
