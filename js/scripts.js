@@ -20,7 +20,7 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
 function getList() {
     axios({
             method: 'get',
-            url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=800&order=title',
+            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=800&order=title',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -50,7 +50,7 @@ function getList() {
 function getFavorite() {
     axios({
             method: 'get',
-            url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
+            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -515,7 +515,7 @@ function toggleFavorite(event) {
     if (target.classList.contains("js-favorite")) {
 
         var id = target.getAttribute("data-id");
-        var url = "http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
+        var url = "https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
         startLoadingAnimation();
 
         if (!item.hasAttribute("data-favorite")) {

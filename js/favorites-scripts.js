@@ -2,6 +2,8 @@ var termsListOriginal, termsListArray, termsListArrayIDs = [],
     favoriteArray = [],
     favoriteArrayIDs, session;
 
+startLoadingAnimation();
+
 //Получаем json
 axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
         "username": "abbreviations",
@@ -25,7 +27,7 @@ function getFavorite() {
 
     axios({
             method: 'get',
-            url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
+            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -41,7 +43,7 @@ function getFavorite() {
             favoriteArrayIDs.forEach(function (item, i, arr) {
                 axios({
                         method: 'get',
-                        url: 'http://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations/' + item,
+                        url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations/' + item,
                         headers: {
                             'X-Appercode-Session-Token': session
                         }
@@ -144,6 +146,8 @@ function createList() {
             item.appendChild(itemSubtitle);
         }
     });
+    
+    stopLoadingAnimation();
 }
 
 //Создание алфавита справа 
@@ -258,6 +262,27 @@ function stringTruncation(str, maxLength) {
     return str;
 }
 
+// функция запускающая анимацию
+
+function startLoadingAnimation() 
+{
+  
+  var imgObj = $("#loadImg");
+  imgObj.show();
+ 
+  var centerY = $(window).scrollTop() + ($(window).height() + imgObj.height())/2;
+  var centerX = $(window).scrollLeft() + ($(window).width() + imgObj.width())/2;
+
+  imgObj.offset({top:centerY,left:centerX});
+};
+
+// функция останавливающая анимацию
+
+function stopLoadingAnimation() 
+{
+  $("#loadImg").hide();
+}
+
 //Поиск и фильтрация из input
 
 function searchTerm() {
@@ -297,7 +322,7 @@ function searchTerm() {
 
     createLettersList();
     hideArrow();
-
+    stopLoadingAnimation();
 
 };
 
@@ -508,7 +533,8 @@ function toggleFavorite(event) {
     if (target.classList.contains("js-favorite")) {
 
         var id = target.getAttribute("data-id");
-        var url = "http://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
+        var url = "https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
+        startLoadingAnimation();
 
         if (!item.hasAttribute("data-favorite")) {
 
@@ -520,6 +546,7 @@ function toggleFavorite(event) {
                     }
                 })
                 .then(function (response) {
+                    stopLoadingAnimation();
                     item.setAttribute("data-favorite", "true");
                     target.innerHTML = "Убрать из избранного";
                 })
@@ -534,6 +561,7 @@ function toggleFavorite(event) {
                     }
                 })
                 .then(function (response) {
+                    stopLoadingAnimation();
                     item.removeAttribute("data-favorite");
                     target.innerHTML = "В избранное";
                 })
@@ -544,7 +572,10 @@ function toggleFavorite(event) {
     }
 }
 
+var input = document.getElementById("search");
+var inputLoader = debounce(startLoadingAnimation, 400);
 
+input.addEventListener("keyup", inputLoader);
 list.addEventListener("click", CloseModal);
 list.addEventListener("click", OpenModal);
 list.addEventListener("click", NextModal);
