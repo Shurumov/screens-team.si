@@ -59,7 +59,7 @@ function getFavorite() {
                             var screenHeight = screen.height,
                                 alphabetHeight = document.getElementsByClassName("list-terms__letter-list")[0].offsetHeight;
 
-                            if ((screenHeight - 100) < alphabetHeight) {
+                            if ((screenHeight*0.8) < alphabetHeight) {
                                 document.getElementsByClassName("list-terms__letter-list")[0].remove();
                             }
 

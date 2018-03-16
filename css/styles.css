@@ -121,7 +121,9 @@ a {
 
 .list-terms__item-modal {
     position: fixed;
-    display: block;
+    display: flex;
+    align-items: center;
+    align-content: center;
     z-index: 1;
     left: 0;
     top: 0;
@@ -135,6 +137,7 @@ a {
     background-color: #fff;
     margin: 5% 16px;
     border-radius: 4px;
+    width: 100%;
 }
 
 .list-terms__item-modal-top {
