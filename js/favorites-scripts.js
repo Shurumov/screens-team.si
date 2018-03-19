@@ -87,6 +87,11 @@ function getFavorite() {
 var listTermsElements = document.getElementsByClassName('list-terms__elements')[0];
 
 function createList() {
+    
+    var letterWidth = getTextWidth("a", "normal 13px sans-serif");
+    var lineWidth = screen.width;
+    
+    var lettersQuantity = Math.round(lineWidth / letterWidth);
 
 
     favoriteArray = favoriteArray.slice().sort(function (one, two) {
@@ -142,7 +147,7 @@ function createList() {
 
             var itemSubtitle = document.createElement('div');
             itemSubtitle.className = "list-terms__item-subtitle";
-            itemSubtitle.innerHTML = stringTruncation(favoriteArray[i].html, 30);
+            itemSubtitle.innerHTML = stringTruncation(favoriteArray[i].html, lettersQuantity);
             item.appendChild(itemSubtitle);
         }
     });
@@ -283,6 +288,16 @@ function stopLoadingAnimation()
   $("#loadImg").hide();
 }
 
+// ширина строки
+
+function getTextWidth(text, font) {
+    var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+}
+
 //Поиск и фильтрация из input
 
 function searchTerm() {
@@ -350,7 +365,7 @@ function CreateModal(title, description, id, target, favorite, first, last) {
 
     var itemModalTitle = document.createElement('div');
     itemModalTitle.className = "list-terms__item-modal-title";
-    itemModalTitle.innerHTML = stringTruncation(title, 25);
+    itemModalTitle.innerHTML = title;
     itemModalTop.appendChild(itemModalTitle);
 
     var itemModalClose = document.createElement('a');
