@@ -12,30 +12,7 @@ a {
     display: none !important;
 }
 
-.list-terms__letter-list_wrapper {
-    height: 100%;
-    position: fixed;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-}
 
-.list-terms__letter-list {
-    width: 18px;
-    margin: 0;
-    background-color: rgba(255, 255, 255, 0.7);
-}
-
-.list-terms__letter-list-item {
-    height: 15px;
-    font-size: 11px;
-    line-height: 13px;
-    text-align: center;
-    color: #E16262;
-    cursor: pointer;
-}
 
 .list-terms__search {
     background-color: #EBEEF2;
@@ -64,8 +41,7 @@ a {
 
 .list-terms__item_wrapper {
     display: block;
-    margin-left: 1em;
-    margin-right: 18px;
+    
     list-style: none;
 
 }
@@ -107,14 +83,16 @@ a {
 
 
 .list-terms__item-title {
-    margin-top: 0.75em;
+    padding-top: 0.75em;
+    padding-left: 1em;
     font-size: 15px;
     line-height: 18px;
     color: #373737;
 }
 
 .list-terms__item-subtitle {
-    margin-bottom: 0.75em;
+    padding-left: 1em;
+    padding-bottom: 0.75em;
     font-size: 13px;
     line-height: 15px;
     color: #8E8E93;
@@ -181,7 +159,7 @@ a {
     text-align: center;
     font-size: 13px;
     line-height: 15px;
-    color: #E16262;
+    color: #4C942A;
     font-weight: bold;
 }
 

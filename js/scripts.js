@@ -29,7 +29,6 @@ function getList() {
             termsListArray = response.data;
             
             createList();
-            createLettersList();
             var screenHeight = screen.height,
                 alphabetHeight = document.getElementsByClassName("list-terms__letter-list")[0].offsetHeight;
 
@@ -131,39 +130,10 @@ function createList() {
     stopLoadingAnimation();
 }
 
-//Создание алфавита справа 
+
 
 var listTerms = document.getElementsByClassName('list-terms')[0];
 
-function createLettersList() {
-    var Headers = document.getElementsByClassName("list-terms__header-group");
-    var groupHeaders = [];
-    for (var i = 0; i < Headers.length; i++) {
-        groupHeaders[i] = Headers[i].firstChild.innerHTML;
-    }
-
-    var rightList = document.getElementsByClassName("list-terms__letter-list_wrapper")[0];
-
-    if (rightList) {
-        listTerms.removeChild(rightList);
-    }
-
-    var letterListWrapper = document.createElement('div');
-    letterListWrapper.className = "list-terms__letter-list_wrapper";
-    listTerms.appendChild(letterListWrapper);
-    listTerms.insertBefore(letterListWrapper, listTerms.firstChild);
-
-    var letterList = document.createElement('div');
-    letterList.className = "list-terms__letter-list";
-    letterListWrapper.appendChild(letterList);
-
-    groupHeaders.forEach(function (item, i, groupHeaders) {
-        var itemLettersList = document.createElement('div');
-        itemLettersList.className = "list-terms__letter-list-item";
-        itemLettersList.innerHTML = groupHeaders[i];
-        letterList.appendChild(itemLettersList);
-    });
-}
 
 // Удаление и добавленеи стрелок в первом и последнем модальном окне
 
@@ -314,7 +284,7 @@ function searchTerm() {
         activeTerms[j].parentNode.childNodes[0].classList.add('list-terms__header-group');
     }
 
-    createLettersList();
+  
     hideArrow();
     stopLoadingAnimation();
 
