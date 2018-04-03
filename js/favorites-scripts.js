@@ -1,33 +1,38 @@
 var termsListOriginal, termsListArray, termsListArrayIDs = [],
     favoriteArray = [],
-    favoriteArrayIDs, session;
+    favoriteArrayIDs, session, project;
 
 startLoadingAnimation();
 
 //Получаем json
-axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
-        "username": "abbreviations",
-        "password": "gth7596"
-    })
-    .then(function (response) {
-        session = response.data.sessionId;
-        getFavorite();
+//axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
+//        "username": "abbreviations",
+//        "password": "gth7596"
+//    })
+//    .then(function (response) {
+//        session = response.data.sessionId;
+//        getFavorite();
+//
+//    })
+//
+//    .catch(function (error) {
+//        console.log(error);
+//    });
 
-    })
-
-    .catch(function (error) {
-        console.log(error);
-    });
-
-
-
+function sessionFromNative(e){
+	var userData = JSON.parse(e);
+    session = userData.sessionId;
+    project = userData.projectName;
+    getFavorite(session, project)
+}
 
 
-function getFavorite() {
+
+function getFavorite(session, project) {
 
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
+            url: 'https://api.sbercode.appercode.com/v1/'+ project +'/favorites/Abbreviations',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -43,7 +48,7 @@ function getFavorite() {
             favoriteArrayIDs.forEach(function (item, i, arr) {
                 axios({
                         method: 'get',
-                        url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations/' + item,
+                        url: 'https://api.sbercode.appercode.com/v1/'+ project +'/objects/Abbreviations/' + item,
                         headers: {
                             'X-Appercode-Session-Token': session
                         }
@@ -520,7 +525,7 @@ function toggleFavorite(event) {
     if (target.classList.contains("js-favorite")) {
 
         var id = target.getAttribute("data-id");
-        var url = "https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
+        var url = "https://api.sbercode.appercode.com/v1/"+ project +"/favorites/Abbreviations/" + id;
         startLoadingAnimation();
 
         if (!item.hasAttribute("data-favorite")) {

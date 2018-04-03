@@ -1,26 +1,33 @@
 
 
-var termsListArray, favoriteArray, session;
+var termsListArray, favoriteArray, session, project;
 startLoadingAnimation();
 
 //Получаем json
-axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
-        "username": "abbreviations",
-        "password": "gth7596"
-    })
-    .then(function (response) {
-        session = response.data.sessionId;
-        getList();
+//axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
+//        "username": "abbreviations",
+//        "password": "gth7596"
+//    })
+//    .then(function (response) {
+//        session = response.data.sessionId;
+//        getList();
+//
+//    })
+//    .catch(function (error) {
+//        console.log(error);
+//    });
 
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+function sessionFromNative(e){
+	var userData = JSON.parse(e);
+    session = userData.sessionId;
+    project = userData.projectName;
+    getList(session, project)
+}
 
-function getList() {
+function getList(session, project) {
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=800&order=title',
+            url: 'https://api.sbercode.appercode.com/v1/'+ project +'/objects/Abbreviations?take=800&order=title',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -46,10 +53,10 @@ function getList() {
 
 
 
-function getFavorite() {
+function getFavorite(session, project) {
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
+            url: 'https://api.sbercode.appercode.com/v1/'+ project +'/favorites/Abbreviations',
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -126,7 +133,7 @@ function createList() {
 
         }
     });
-    getFavorite();
+    getFavorite(userSession, userProject);
     stopLoadingAnimation();
 }
 
@@ -499,7 +506,7 @@ function toggleFavorite(event) {
     if (target.classList.contains("js-favorite")) {
 
         var id = target.getAttribute("data-id");
-        var url = "https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
+        var url = "https://api.sbercode.appercode.com/v1/"+ project +"/favorites/Abbreviations/" + id;
         startLoadingAnimation();
 
         if (!item.hasAttribute("data-favorite")) {
