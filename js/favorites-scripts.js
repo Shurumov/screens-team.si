@@ -434,9 +434,15 @@ function CloseModal(event) {
 function PrevModal(eventPrev) {
     var target = eventPrev.target;
 
-    if (target.parentNode.classList.contains("prev")) {
+    if (target.classList.contains("prev") || target.parentNode.classList.contains("prev")) {
 
-        var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        if (target.classList.contains("prev")) {
+            var origin = target.parentNode.parentNode.parentNode.parentNode;
+        }
+        
+        if (target.parentNode.classList.contains("prev")) {
+            var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        }
 
         while (!target.classList.contains("list-terms__item_wrapper")) {
             if (target.classList.contains("list-terms__item_wrapper")) {
@@ -471,9 +477,15 @@ function PrevModal(eventPrev) {
 function NextModal(eventNext) {
     var target = eventNext.target;
 
-    if (target.parentNode.classList.contains("next")) {
-
-        var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
+    if (target.classList.contains("next") || target.parentNode.classList.contains("next")) {
+        
+        if (target.classList.contains("next")) {
+            var origin = target.parentNode.parentNode.parentNode.parentNode;
+        }
+        
+        if (target.parentNode.classList.contains("next")) {
+            var origin = target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        }
 
 
         while (!target.classList.contains("list-terms__item_wrapper")) {

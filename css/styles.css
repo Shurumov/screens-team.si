@@ -154,8 +154,6 @@ a {
 
 .list-terms__item-modal-bottom {
     border-top: 1px solid #C7C7C7;
-    padding: 15px 20px;
-
     text-align: center;
     font-size: 13px;
     line-height: 15px;
@@ -170,6 +168,7 @@ a {
 }
 
 .prev {
+    padding: 15px 20px;
     position: absolute;
     left: 0;
     font-size: 13px;
@@ -178,10 +177,12 @@ a {
 }
 
 .favorite {
+    padding: 15px 20px;
     cursor: pointer;
 }
 
 .next {
+    padding: 15px 20px;
     position: absolute;
     right: 0;
     font-size: 13px;
