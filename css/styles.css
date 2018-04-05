@@ -152,52 +152,7 @@ a {
     margin-bottom: 5px;
 }
 
-.list-terms__item-modal-bottom {
-    border-top: 1px solid #C7C7C7;
-    text-align: center;
-    font-size: 13px;
-    line-height: 15px;
-    color: #4C942A;
-    font-weight: bold;
-}
 
-.list-terms__item-modal-bottom-text {
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
-
-.prev {
-    padding: 15px 20px;
-    position: absolute;
-    left: 0;
-    font-size: 13px;
-    color: #C7C7CC;
-    cursor: pointer;
-}
-
-.favorite {
-    padding: 15px 20px;
-    cursor: pointer;
-}
-
-.next {
-    padding: 15px 20px;
-    position: absolute;
-    right: 0;
-    font-size: 13px;
-    color: #C7C7CC;
-    cursor: pointer;
-}
-
-.next img {
-    transform: rotate(180deg);
-}
-
-.arrow {
-    height: 16px;
-    vertical-align: middle;
-}
 
 #loadImg{
     display: none;
