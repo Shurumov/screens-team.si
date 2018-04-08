@@ -84,18 +84,21 @@ a {
 
 .list-terms__item-title {
     padding-top: 0.75em;
-    padding-left: 1em;
+    padding-left: 16px;
     font-size: 15px;
     line-height: 18px;
     color: #373737;
 }
 
 .list-terms__item-subtitle {
-    padding-left: 1em;
+    padding-left: 16px;
     padding-bottom: 0.75em;
     font-size: 13px;
     line-height: 15px;
     color: #8E8E93;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .list-terms__item-modal {
@@ -157,4 +160,7 @@ a {
 #loadImg{
     display: none;
     z-index: 100;
+    position: fixed;
 }
+
+
