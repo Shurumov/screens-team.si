@@ -13,7 +13,7 @@ function sessionFromNative(e){
 
 function getList(session, project, base) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', base + project + '/objects/Abbreviations?take=800&order=title', false);
+    xhr.open('GET', base + project + '/objects/Dictionary?take=-1&order=title', false);
     xhr.setRequestHeader('X-Appercode-Session-Token', session);
     xhr.send();
 
@@ -29,7 +29,7 @@ function getList(session, project, base) {
 
 
 
-// Создание списка
+
 
 var listTermsElements = document.getElementsByClassName('list-terms__elements')[0];
 
@@ -41,7 +41,7 @@ function createList() {
     
     termsListArray.forEach(function (item, i, termsListArray) {
 
-        //создание группы и хедера 
+        
 
         if (termsListArray[i].title.charAt(0) != groupTitle) {
             groupTitle = termsListArray[i].title.charAt(0);
@@ -60,7 +60,7 @@ function createList() {
             header.appendChild(text);
         }
 
-        // создание блоков терминов
+        
 
         if (termsListArray[i].title && termsListArray[i].html) {
 
@@ -91,7 +91,7 @@ function createList() {
 }
 
 var listTerms = document.getElementsByClassName('list-terms')[0];
-// Вспомогательные функции
+
 
 function debounce(f, ms) {
 
@@ -109,23 +109,22 @@ function debounce(f, ms) {
     };
 };
 
-// функция запускающая анимацию
+
 
 function startLoadingAnimation() {
-    var imgObj = document.getElementById('loadImg');
+    var imgObj = document.getElementById('floatingBarsG');
     imgObj.style.display = "block";
     imgObj.style.left = (screen.width - imgObj.width) / 2 + "px";
     imgObj.style.top = (screen.height - imgObj.height) / 3 + "px";
 };
 
-// функция останавливающая анимацию
 
 function stopLoadingAnimation() {
-    var imgObj = document.getElementById('loadImg');
+    var imgObj = document.getElementById('floatingBarsG');
     imgObj.style.display = "none";
 }
 
-//Поиск и фильтрация из input
+
 
 function searchTerm() {
     var input, filter, search, item, a;
@@ -165,7 +164,7 @@ var list = document.getElementsByClassName("list-terms__elements")[0];
 
 function CreateModal(title, description, id, target) {
 
-    //Модальное окно
+    
 
     var itemModal = document.createElement('div');
     itemModal.className = "list-terms__item-modal";
@@ -175,7 +174,7 @@ function CreateModal(title, description, id, target) {
     itemContent.className = "list-terms__item-modal-content";
     itemModal.appendChild(itemContent);
 
-    //Хедер модального окна
+  
 
     var itemModalTop = document.createElement('div');
     itemModalTop.className = "list-terms__item-modal-top";
@@ -191,7 +190,7 @@ function CreateModal(title, description, id, target) {
     itemModalClose.innerHTML = "<img src=img/close.svg >";
     itemModalTitle.appendChild(itemModalClose);
 
-    //Середина модального окна
+    
 
     var itemModalMiddle = document.createElement('div');
     itemModalMiddle.className = "list-terms__item-modal-middle";
