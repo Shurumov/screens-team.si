@@ -113,9 +113,9 @@ function debounce(f, ms) {
 
 function startLoadingAnimation() {
     var imgObj = document.getElementById('floatingBarsG');
-    imgObj.style.display = "block";
-    imgObj.style.left = (screen.width - imgObj.width) / 2 + "px";
-    imgObj.style.top = (screen.height - imgObj.height) / 3 + "px";
+    imgObj.style.position = "fixed";
+    imgObj.style.left = (screen.width - parseInt(getComputedStyle(imgObj).width)) / 2 + "px";
+    imgObj.style.top = (screen.height - parseInt(getComputedStyle(imgObj).height)) / 2 + "px";
 };
 
 
