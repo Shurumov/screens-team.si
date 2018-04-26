@@ -36,7 +36,6 @@ function getFavorite() {
         
             favoriteArrayIDs = response.data;
             
-            console.log(favoriteArrayIDs)
 
             return favoriteArrayIDs
         })
@@ -342,7 +341,7 @@ function CreateModal(title, description, id, target, favorite, first, last) {
 
     var itemModalTitle = document.createElement('div');
     itemModalTitle.className = "list-terms__item-modal-title";
-    itemModalTitle.innerHTML = stringTruncation(title, 25);
+    itemModalTitle.innerHTML = title;
     itemModalTop.appendChild(itemModalTitle);
 
     var itemModalClose = document.createElement('a');
