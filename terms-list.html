@@ -2,40 +2,52 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="css/styles.css?1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css?4">
 
 </head>
 
 <body>
-  <div class="list-terms">
+    <div class="list-terms">
+
+        <div class="list-terms__search">
+            <input autocomplete="off" id="search" type="text" onkeyup="search()" placeholder="Поиск">
+        </div>
+        <div class="list-terms__elements">
+
+            <div class="list-terms__item-modal disable">
+                <div class="list-terms__item-modal-content">
+                    <div class="list-terms__item-modal-top">
+                        <div class="list-terms__item-modal-title">
+                            <a class="modal-close"><img src="img/close.svg"></a>
+                        </div>
+                    </div>
+                    <div class="list-terms__item-modal-middle"></div>
+                </div>
+            </div>
+        </div>
 
 
 
-    <div class="list-terms__search">
-      <input autocomplete="off" id="search" type="text" onkeyup="search()" placeholder="Поиск">
     </div>
-    <div class="list-terms__elements"></div>
-
-  </div>
 
 
     <div id="floatingBarsG">
-      <div class="blockG" id="rotateG_01"></div>
-      <div class="blockG" id="rotateG_02"></div>
-      <div class="blockG" id="rotateG_03"></div>
-      <div class="blockG" id="rotateG_04"></div>
-      <div class="blockG" id="rotateG_05"></div>
-      <div class="blockG" id="rotateG_06"></div>
-      <div class="blockG" id="rotateG_07"></div>
-      <div class="blockG" id="rotateG_08"></div>
+        <div class="blockG" id="rotateG_01"></div>
+        <div class="blockG" id="rotateG_02"></div>
+        <div class="blockG" id="rotateG_03"></div>
+        <div class="blockG" id="rotateG_04"></div>
+        <div class="blockG" id="rotateG_05"></div>
+        <div class="blockG" id="rotateG_06"></div>
+        <div class="blockG" id="rotateG_07"></div>
+        <div class="blockG" id="rotateG_08"></div>
     </div>
 
 
 
-  <script src="js/scripts.js?1"></script>
+    <script src="js/scripts.js?4"></script>
 
 </body>
 

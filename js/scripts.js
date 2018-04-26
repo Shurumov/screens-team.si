@@ -1,29 +1,57 @@
-var termsListArray, favoriteArray, session, project, baseUrl;
+var termsListArray, favoriteArray, session, project, baseUrl, refreshT;
 startLoadingAnimation();
 
 
 
-function sessionFromNative(e){
-	var userData = JSON.parse(e);
+function sessionFromNative(e) {
+    var userData = JSON.parse(e);
     session = userData.sessionId;
     project = userData.projectName;
     baseUrl = userData.baseUrl;
+    refreshT = userData.refreshToken;
     getList(session, project, baseUrl)
+}
+
+function loginByToken(){
+    var xhr = new XMLHttpRequest();
+    var url = baseUrl + project + "/login/byToken";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    
+    
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState != 4) 
+          return;
+      if (xhr.status != 200) {
+            alert(xhr.status + ': ' + xhr.statusText);
+        } else {
+            var response = JSON.parse(xhr.responseText)
+            session = response.sessionId;
+            getList(session, project, baseUrl)
+        }
+    };
+
+    
+    xhr.send('"'+refreshT+'"');
 }
 
 function getList(session, project, base) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', base + project + '/objects/Dictionary?take=-1&order=title', false);
+    xhr.open('GET', base + project + "/objects/Dictionary?take=-1&order=title&include=['title','html']");
     xhr.setRequestHeader('X-Appercode-Session-Token', session);
     xhr.send();
-
-    if (xhr.status != 200) {
-
-        alert(xhr.status + ': ' + xhr.statusText); 
-    } else {
-        termsListArray = JSON.parse(xhr.responseText);
-        
-        createList();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState != 4) 
+            return;
+        if (xhr.status == 401){
+            loginByToken();
+        } else 
+        if (xhr.status != 200) {
+            alert(xhr.status + ': ' + xhr.statusText);
+        } else {
+            termsListArray = JSON.parse(xhr.responseText);
+            createList();
+        }
     }
 };
 
@@ -31,20 +59,16 @@ function getList(session, project, base) {
 
 
 
-var listTermsElements = document.getElementsByClassName('list-terms__elements')[0];
+var listTermsElements = document.querySelector('.list-terms__elements');
 
 function createList() {
     var groups = document.getElementsByClassName('list-terms__group');
-    var groupTitle;
-    console.log(termsListArray);
-    console.log(termsListArray.length);
-    
-    termsListArray.forEach(function (item, i, termsListArray) {
+    var groupTitle = '';
 
-        
+    termsListArray.forEach(function (item, i) {
 
-        if (termsListArray[i].title.charAt(0) != groupTitle) {
-            groupTitle = termsListArray[i].title.charAt(0);
+        if (item.title[0].toUpperCase() !== groupTitle.toUpperCase()) {
+            groupTitle = item.title[0];
 
             var group = document.createElement('div');
             group.className = "list-terms__group";
@@ -52,45 +76,41 @@ function createList() {
 
             var header = document.createElement('div');
             header.className = "list-terms__header-group";
+            header.innerHTML = item.title[0];
             group.appendChild(header)
 
-            var text = document.createElement('a');
-            text.className = "js-group-header";
-            text.innerHTML = termsListArray[i].title.charAt(0);
-            header.appendChild(text);
         }
 
-        
 
-        if (termsListArray[i].title && termsListArray[i].html) {
+
+        if (item.title && item.html) {
 
             var itemWrapper = document.createElement('div');
             itemWrapper.className = "list-terms__item_wrapper js-show-hide";
             groups[groups.length - 1].appendChild(itemWrapper);
 
-            var item = document.createElement('a');
-            item.className = "list-terms__item";
-            item.setAttribute("data-title", termsListArray[i].title);
-            item.setAttribute("data-description", termsListArray[i].html);
-            item.setAttribute("data-id", termsListArray[i].id);
-            itemWrapper.appendChild(item);
+            var term = document.createElement('a');
+            term.className = "list-terms__item";
+            term.setAttribute("data-title", item.title);
+            term.setAttribute("data-description", item.html);
+            itemWrapper.appendChild(term);
 
             var itemTitle = document.createElement('div');
             itemTitle.className = "list-terms__item-title js-search";
-            itemTitle.innerHTML = termsListArray[i].title;
-            item.appendChild(itemTitle);
+            itemTitle.innerHTML = item.title;
+            term.appendChild(itemTitle);
 
             var itemSubtitle = document.createElement('div');
             itemSubtitle.className = "list-terms__item-subtitle";
-            itemSubtitle.innerHTML = termsListArray[i].html;
-            item.appendChild(itemSubtitle);
+            itemSubtitle.innerHTML = item.html;
+            term.appendChild(itemSubtitle);
 
         }
     });
     stopLoadingAnimation();
 }
 
-var listTerms = document.getElementsByClassName('list-terms')[0];
+var listTerms = document.querySelector('.list-terms');
 
 
 function debounce(f, ms) {
@@ -113,9 +133,7 @@ function debounce(f, ms) {
 
 function startLoadingAnimation() {
     var imgObj = document.getElementById('floatingBarsG');
-    imgObj.style.position = "fixed";
-    imgObj.style.left = (screen.width - parseInt(getComputedStyle(imgObj).width)) / 2 + "px";
-    imgObj.style.top = (screen.height - parseInt(getComputedStyle(imgObj).height)) / 2 + "px";
+    imgObj.style.display = "block";
 };
 
 
@@ -127,78 +145,50 @@ function stopLoadingAnimation() {
 
 
 function searchTerm() {
+    startLoadingAnimation();
     var input, filter, search, item, a;
     input = document.getElementById('search');
     filter = input.value.toUpperCase();
     search = document.getElementsByClassName("js-search");
     item = document.getElementsByClassName("js-show-hide");
+    headers = document.getElementsByClassName("list-terms__header-group");
+
+    Array.prototype.forEach.call(headers, function (item, i) {
+        item.classList.add('disable');
+    })
 
     for (var i = 0; i < search.length; i++) {
         a = search[i];
 
         if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            item[i].classList.remove('list-terms__item_wrapper_disable');
-            item[i].classList.add('list-terms__item_wrapper');
+            item[i].classList.remove('disable');
         } else {
-            item[i].classList.add('list-terms__item_wrapper_disable');
-            item[i].classList.remove('list-terms__item_wrapper');
+            item[i].classList.add('disable');
         };
 
-        item[i].parentNode.childNodes[0].classList.add('list-terms__header-group_disable');
-        item[i].parentNode.childNodes[0].classList.remove('list-terms__header-group');
     }
 
-    var activeTerms = document.getElementsByClassName("list-terms__item_wrapper");
+    var activeTerms = document.querySelectorAll(".list-terms__item_wrapper:not(.disable)");
 
     for (var j = 0; j < activeTerms.length; j++) {
-        activeTerms[j].parentNode.childNodes[0].classList.remove('list-terms__header-group_disable');
-        activeTerms[j].parentNode.childNodes[0].classList.add('list-terms__header-group');
+        activeTerms[j].parentNode.childNodes[0].classList.remove('disable');
     }
 
     stopLoadingAnimation();
 };
 
-var search = debounce(searchTerm, 500);
+var search = debounce(searchTerm, 300);
 
-var list = document.getElementsByClassName("list-terms__elements")[0];
+var list = document.querySelector(".list-terms__elements");
 
-function CreateModal(title, description, id, target) {
+var modal = document.querySelector(".list-terms__item-modal");
 
-    
+var modalTitle = document.querySelector(".list-terms__item-modal-title");
 
-    var itemModal = document.createElement('div');
-    itemModal.className = "list-terms__item-modal";
-    target.appendChild(itemModal);
+var modalDesription = document.querySelector(".list-terms__item-modal-middle");
 
-    var itemContent = document.createElement('div');
-    itemContent.className = "list-terms__item-modal-content";
-    itemModal.appendChild(itemContent);
 
-  
-
-    var itemModalTop = document.createElement('div');
-    itemModalTop.className = "list-terms__item-modal-top";
-    itemContent.appendChild(itemModalTop);
-
-    var itemModalTitle = document.createElement('div');
-    itemModalTitle.className = "list-terms__item-modal-title";
-    itemModalTitle.innerHTML = title;
-    itemModalTop.appendChild(itemModalTitle);
-
-    var itemModalClose = document.createElement('a');
-    itemModalClose.className = "modal-close";
-    itemModalClose.innerHTML = "<img src=img/close.svg >";
-    itemModalTitle.appendChild(itemModalClose);
-
-    
-
-    var itemModalMiddle = document.createElement('div');
-    itemModalMiddle.className = "list-terms__item-modal-middle";
-    itemModalMiddle.innerHTML = description;
-    itemContent.appendChild(itemModalMiddle);
-}
-
-function OpenModal(event) {
+function openModal(event) {
     var target = event.target;
 
 
@@ -208,25 +198,27 @@ function OpenModal(event) {
 
     if (target.classList.contains("list-terms__item")) {
 
-        CreateModal(target.getAttribute("data-title"), target.getAttribute("data-description"), target.getAttribute("data-id"), target.parentNode)
+        modal.classList.remove("disable")
+
+        modalTitle.innerHTML = target.getAttribute("data-title") + '<a class="modal-close"><img src="img/close.svg"></a>';
+
+        modalDesription.innerHTML = target.getAttribute("data-description");
     }
 }
 
-function CloseModal(event) {
+function closeModal(event) {
     var target = event.target;
 
     if (target.parentNode.classList.contains("modal-close") || target.classList.contains("modal-close")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+        modal.classList.add("disable")
     }
 
     if (target.classList.contains("list-terms__item-modal")) {
-        target.remove();
+        modal.classList.add("disable")
     }
 };
 
 var input = document.getElementById("search");
-var inputLoader = debounce(startLoadingAnimation, 400);
 
-input.addEventListener("keyup", inputLoader);
-list.addEventListener("click", CloseModal);
-list.addEventListener("click", OpenModal);
+list.addEventListener("click", closeModal);
+list.addEventListener("click", openModal);
