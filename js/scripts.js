@@ -5,8 +5,8 @@ startLoadingAnimation();
 
 //Получаем json
 axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
-        "username": "abbreviations",
-        "password": "gth7596"
+        "username": "ca64715",
+        "password": "ca64715"
     })
     .then(function (response) {
         session = response.data.sessionId;
@@ -20,7 +20,7 @@ axios.post('https://api.sbercode.appercode.com/v1/sbercode_ca/login', {
 function getList() {
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Abbreviations?take=800&order=title',
+            url: "https://api.sbercode.appercode.com/v1/sbercode_ca/objects/Dictionary?take=-1&order=title&include=['title','html','id']",
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -33,7 +33,7 @@ function getList() {
             var screenHeight = screen.height,
                 alphabetHeight = document.getElementsByClassName("list-terms__letter-list")[0].offsetHeight;
 
-            if ((screenHeight*0.8) < alphabetHeight) {
+            if ((screenHeight*0.7) < alphabetHeight) {
                document.getElementsByClassName("list-terms__letter-list")[0].remove();
             }
             hideArrow();
@@ -50,7 +50,7 @@ function getList() {
 function getFavorite() {
     axios({
             method: 'get',
-            url: 'https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations',
+            url: "https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Dictionary",
             headers: {
                 'X-Appercode-Session-Token': session
             }
@@ -74,13 +74,13 @@ function createList() {
 
     var groups = document.getElementsByClassName('list-terms__group');
     var groupTitle;
-    termsListArray.forEach(function (item, i, termsListArray) {
+    termsListArray.forEach(function (item, i) {
 
 
         //создание группы и хедера 
 
-        if (termsListArray[i].title.charAt(0) != groupTitle) {
-            groupTitle = termsListArray[i].title.charAt(0);
+        if (item.title.charAt(0) != groupTitle) {
+            groupTitle = item.title.charAt(0);
 
             var group = document.createElement('div');
             group.className = "list-terms__group";
@@ -92,34 +92,34 @@ function createList() {
 
             var text = document.createElement('a');
             text.className = "js-group-header";
-            text.innerHTML = termsListArray[i].title.charAt(0);
+            text.innerHTML = item.title.charAt(0);
             header.appendChild(text);
         }
 
         // создание блоков терминов
 
-        if (termsListArray[i].title && termsListArray[i].html) {
+        if (item.title && item.html) {
 
             var itemWrapper = document.createElement('div');
             itemWrapper.className = "list-terms__item_wrapper js-show-hide";
             groups[groups.length - 1].appendChild(itemWrapper);
 
-            var item = document.createElement('a');
-            item.className = "list-terms__item";
-            item.setAttribute("data-title", termsListArray[i].title);
-            item.setAttribute("data-description", termsListArray[i].html);
-            item.setAttribute("data-id", termsListArray[i].id);
-            itemWrapper.appendChild(item);
+            var term = document.createElement('a');
+            term.className = "list-terms__item";
+            term.setAttribute("data-title", item.title);
+            term.setAttribute("data-description", item.html);
+            term.setAttribute("data-id", item.id);
+            itemWrapper.appendChild(term);
 
             var itemTitle = document.createElement('div');
             itemTitle.className = "list-terms__item-title js-search";
-            itemTitle.innerHTML = termsListArray[i].title;
-            item.appendChild(itemTitle);
+            itemTitle.innerHTML = item.title;
+            term.appendChild(itemTitle);
 
             var itemSubtitle = document.createElement('div');
             itemSubtitle.className = "list-terms__item-subtitle";
-            itemSubtitle.innerHTML = stringTruncation(termsListArray[i].html, 30);
-            item.appendChild(itemSubtitle);
+            itemSubtitle.innerHTML = item.html;
+            term.appendChild(itemSubtitle);
 
         }
     });
@@ -132,7 +132,7 @@ function createList() {
 var listTerms = document.getElementsByClassName('list-terms')[0];
 
 function createLettersList() {
-    var Headers = document.getElementsByClassName("list-terms__header-group");
+    var Headers = document.querySelectorAll(".list-terms__header-group:not(.disable)");
     var groupHeaders = [];
     for (var i = 0; i < Headers.length; i++) {
         groupHeaders[i] = Headers[i].firstChild.innerHTML;
@@ -245,21 +245,16 @@ function stringTruncation(str, maxLength) {
 
 function startLoadingAnimation() 
 {
-  
-  var imgObj = $("#loadImg");
-  imgObj.show();
- 
-  var centerY = $(window).scrollTop() + ($(window).height() + imgObj.height())/2;
-  var centerX = $(window).scrollLeft() + ($(window).width() + imgObj.width())/2;
-
-  imgObj.offset({top:centerY,left:centerX});
+  var imgObj = document.getElementById('loadImg');
+  imgObj.style.display="block";
 };
 
 // функция останавливающая анимацию
 
 function stopLoadingAnimation() 
 {
-  $("#loadImg").hide();
+    var imgObj = document.getElementById('loadImg');
+    imgObj.style.display = "none";
 }
 
 //Поиск и фильтрация из input
@@ -273,6 +268,11 @@ function searchTerm() {
     filter = input.value.toUpperCase();
     search = document.getElementsByClassName("js-search");
     item = document.getElementsByClassName("js-show-hide");
+    headers = document.getElementsByClassName("list-terms__header-group");
+
+    Array.prototype.forEach.call(headers, function (item, i) {
+        item.classList.add('disable');
+    })
 
     for (var i = 0; i < search.length; i++) {
         a = search[i];
@@ -280,24 +280,19 @@ function searchTerm() {
         if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
             item[i].classList.remove('list-terms__item_wrapper_disable');
             item[i].classList.add('list-terms__item_wrapper');
-
-
         } else {
             item[i].classList.add('list-terms__item_wrapper_disable');
             item[i].classList.remove('list-terms__item_wrapper');
 
         };
 
-        item[i].parentNode.childNodes[0].classList.add('list-terms__header-group_disable');
-        item[i].parentNode.childNodes[0].classList.remove('list-terms__header-group');
+        
     }
 
-    var activeTerms = document.getElementsByClassName("list-terms__item_wrapper");
+    var activeTerms = document.querySelectorAll(".list-terms__item_wrapper:not(.disable)");
 
     for (var j = 0; j < activeTerms.length; j++) {
-
-        activeTerms[j].parentNode.childNodes[0].classList.remove('list-terms__header-group_disable');
-        activeTerms[j].parentNode.childNodes[0].classList.add('list-terms__header-group');
+        activeTerms[j].parentNode.childNodes[0].classList.remove('disable');
     }
 
     createLettersList();
@@ -330,7 +325,7 @@ function CreateModal(title, description, id, target, favorite, first, last) {
 
     var itemModalTitle = document.createElement('div');
     itemModalTitle.className = "list-terms__item-modal-title";
-    itemModalTitle.innerHTML = stringTruncation(title, 25);
+    itemModalTitle.innerHTML = title;
     itemModalTop.appendChild(itemModalTitle);
 
     var itemModalClose = document.createElement('a');
@@ -409,13 +404,15 @@ function OpenModal(event) {
 
 function CloseModal(event) {
     var target = event.target;
+    
+    var modal = document.querySelector(".list-terms__item-modal");
 
     if (target.parentNode.classList.contains("modal-close") || target.classList.contains("modal-close")) {
-        target.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+        modal.remove();
     }
 
     if (target.classList.contains("list-terms__item-modal")) {
-        target.remove();
+        modal.remove();
     }
 };
 
@@ -515,7 +512,7 @@ function toggleFavorite(event) {
     if (target.classList.contains("js-favorite")) {
 
         var id = target.getAttribute("data-id");
-        var url = "https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Abbreviations/" + id;
+        var url = "https://api.sbercode.appercode.com/v1/sbercode_ca/favorites/Dictionary/" + id;
         startLoadingAnimation();
 
         if (!item.hasAttribute("data-favorite")) {
