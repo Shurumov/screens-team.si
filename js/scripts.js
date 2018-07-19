@@ -190,6 +190,8 @@ var modalDesription = document.querySelector(".list-terms__item-modal-middle");
 
 
 function openModal(event) {
+  document.body.style.overflow = "hidden";
+  
   var target = event.target;
 
 
@@ -208,6 +210,8 @@ function openModal(event) {
 }
 
 function closeModal(event) {
+  console.log("закрыли")
+  document.body.style.overflow = "scroll";
   var target = event.target;
 
   if (target.parentNode.classList.contains("modal-close") || target.classList.contains("modal-close")) {
@@ -217,9 +221,10 @@ function closeModal(event) {
   if (target.classList.contains("list-terms__item-modal")) {
     modal.classList.add("disable")
   }
+  event.stopPropagation();
 };
 
 var input = document.getElementById("search");
 
-list.addEventListener("click", closeModal);
+modal.addEventListener("click", closeModal);
 list.addEventListener("click", openModal);
